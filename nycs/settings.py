@@ -26,7 +26,7 @@ DOMAIN_NAME = 'nycoedsoccer.com'
 SERVER_URL = '34.206.37.249'
 
 # Application definition
-SITE_ID  = 3
+SITE_ID = 4
 
 INSTALLED_APPS = [
     'django.contrib.admin',
