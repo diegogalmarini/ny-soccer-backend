@@ -7,8 +7,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt /app/requirements.txt
 RUN pip install "pip<24.0"
+RUN pip install dj-database-url==0.5.0
 RUN pip install --no-cache-dir -r /app/requirements.txt
-RUN pip install --no-cache-dir gunicorn==20.1.0 pymysql
+RUN pip install --no-cache-dir gunicorn==20.1.0 whitenoise==6.6.0 pymysql
 COPY . /app
 RUN python manage.py collectstatic --noinput
 EXPOSE 8000
