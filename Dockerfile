@@ -10,5 +10,6 @@ RUN pip install "pip<24.0"
 RUN pip install --no-cache-dir --pre -r /app/requirements.txt
 RUN pip install --no-cache-dir gunicorn==20.1.0 pymysql
 COPY . /app
+RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 CMD ["gunicorn", "nycs.wsgi:application", "--bind", "0.0.0.0:8000"]
