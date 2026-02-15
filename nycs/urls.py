@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 from django.contrib import admin
 #from league.admin import admin_site
-from league import views as league_views
+import league.views as league_views
 
 
 urlpatterns = [
