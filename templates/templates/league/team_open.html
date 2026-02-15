@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block page_title %}
+{% if league.is_coed %}NYCS | NY Coed Soccer{% else %}NYCS | Mens Division{% endif %}
+{% endblock page_title %}
+
+{% block navclass %}dark{% endblock %}
+
+{% block navbar_itmes %}{% endblock %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+<section id="league" class="league">
+    <div class="container">
+        <div class="row">
+        	<div class="col-md-offset-2 col-md-8 col-xs-12 col-sm-12">
+
+				<h2>FREE AGENT REGISTRATION</h2></br>
+
+				{% if league.is_coed %}
+					
+				<h4>To register as a Free Agent for this League, a <b>payment</b> is required.</h4></br>
+				<h4>Upon processing you will be assigned to a Team - this assignment will be <b>confirmed</b> by email in the lead-up to the season's start.</h4></br>
+				<h4>If there is a friend you wish to play with, please ensure they are registered - and then email us at <b>{{ league.paypal_account.receiver_email }}</b> with confirmation of their name.</h4></br>
+				<h4>Our Refund Policy is detailed in the <a href='/faq'>FAQ</a> section and should be reviewed before submission of payment.</h4></br>
+
+				{% else %}
+
+				<h4>To register as a Free Agent for this League, a <b>payment</b> is required.</h4></br>
+				<h4>Upon processing you will be assigned to a Team - this assignment will be <b>confirmed</b> by email in the lead-up to the season's start.</h4></br>
+				<h4>For all queries on this League, such as roster assignment and schedule, please email NYCS Mens Division at <b>{{ league.paypal_account.receiver_email }}</b></h4></br>
+
+				{% endif %}
+
+				<form id="regform" action="." method="post">
+					{% csrf_token %}
+					<input class="btn-custom" value="Continue" type="submit">
+				</form>
+	        </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

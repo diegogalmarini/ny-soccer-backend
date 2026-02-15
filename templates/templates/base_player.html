@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navclass %}dark{% endblock %}
+
+{% block navbar_itmes %}{% endblock %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+<section id="player" class="player">
+	<div class="container">
+		<div class="row">
+			<!-- =========  Left Column =========== -->
+			<div class="col-xs-12 col-md-8">
+			{% block left_column %}{% endblock left_column %}
+			</div>
+
+			<!-- =========  Right Column =========== -->
+			<div class="col-xs-12 col-md-4">
+			{% block right_column %}
+
+				<div class="open-leagues">
+			        <h2>{{ openleagues.0.season|default:"Leagues Open for Registration" }}</h2>
+			        <div class="league-list">
+			        {% if openleagues %}
+			        {% for league in openleagues %}
+			            <div class="league-item">
+			                <h5><a href="{% url 'player_join_league' league.id %}">{{ league.name }}</a></h5>
+			                <div class="accepting">
+			                    <ul>		
+			                        {% if league.is_league or league.is_pool_competition or league.is_soccer_school %}
+			                        <li>
+			                        	<i class="fa fa-chevron-right" aria-hidden="true"></i>&nbsp;<b>Free Agent Slots Available:</b>
+			                        	{% if league.is_coed %}
+                                    	<i class="fa fa-female fa-lg" aria-hidden="true"></i>&nbsp;<span class="label label-danger">{{ league.women }}</span>
+                                    	{% endif %}
+			                        	<i class="fa fa-male fa-lg" aria-hidden="true"></i>&nbsp;<span class="label label-info">{{ league.men }}</span>
+			                        </li>
+			                        {% endif %}
+			                        {% if league.is_league or league.is_pool_competition or league.is_tournament %}
+			                        <li>
+			                        	<i class="fa fa-chevron-right" aria-hidden="true"></i>&nbsp;<b>Team Slots Available: </b> {{ league.teams }} slots
+			                        </li>
+			                        {% endif %}
+			                    </ul>
+			                    <ul>
+			                    {% if not league.registered %}
+			                        <a href="{% url 'player_join_league' league.id %}" class="btn-custom">Join</a>
+			                    {% else %}
+			                        <li><b>You're already registered</b></li>
+			                    {% endif %}
+			                    </ul>
+			                </div>
+			            </div>
+			        {% endfor %}
+			        {% else %}
+			            <div class='no-leagues'>There are no leagues currently open for registration.</div>
+			        {% endif %}
+			        </div>
+			    </div>
+			{% endblock right_column %}
+			</div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+{% block footer %}
+
+{{ block.super }} 
+
+{% endblock footer %}
+
+{% block js %}
+{{ block.super }}
+{% endblock js %}

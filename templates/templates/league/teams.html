@@ -1,0 +1,64 @@
+{% extends '../base_player.html' %}
+
+{% block left_column %}
+<span><a href="{% url 'player' %}"><i class="fa fa-arrow-circle-left fa-3x" style="float: left; margin-right: 15px;" aria-hidden="true"></i></a></span>
+                    
+<h2>My Teams and Leagues</h2>
+
+<h4>For your Team and League registrations, see below. Should there be an error in the listing, please email us at <a href="mailto:info@nycoedsoccer.com"><b>info@nycoedsoccer.com</b></a>.</h4>
+
+<h4>Captains can review and amend their rosters by clicking on the symbol.</h4>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>League</th>
+            <th>Team</th>
+            <th>Location</th>
+            <th>Payment</th>
+            <th>Captain</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for teamplayer in teamplayers %}
+      <tr>
+        <td>
+            {% if not teamplayer.league.is_active %}
+            <a href="#">{{ teamplayer.league.name }}</a>
+            {% endif %}
+            
+            {% if teamplayer.league.is_active and teamplayer.team.division %}
+            <a href="{% url 'league_division_schedule' teamplayer.league.id teamplayer.team.division.id %}">{{ teamplayer.league.name }}</a>
+            {% endif %}
+            
+            {% if teamplayer.league.is_active and not teamplayer.team.division %}
+            <a href="{% url 'league_schedule' teamplayer.league.id %}">{{ teamplayer.league.name }}</a>
+            {% endif %}
+        </td>
+        <td>{% if teamplayer.team %}<a href="{% url 'player_team_info' teamplayer.team.id %}">{{ teamplayer.team.name }}</a>{% else %}<em>[to be assigned]</em>{% endif %}
+        </td>
+        <td>
+            {{ teamplayer.league.location.location }}
+        </td>
+        <td>
+            {% if teamplayer.has_paid_or_pending %}
+            <span class="paid">{{ teamplayer.pretty_payment_status }}</span>
+            {% else %}
+            <span class="unpaid">{{ teamplayer.pretty_payment_status }}</span>
+            {% endif %}
+        </td>
+        <td>
+        {% if teamplayer.is_captain %}
+            <a href="{% url 'player_team_info' teamplayer.team.pk %}" class="button edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+        {% else %}
+            <i class="fa fa-times" aria-hidden="true"></i>
+        {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+
+{% block right_column %}{% endblock %}

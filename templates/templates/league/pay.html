@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block page_title %}
+{% if placeholder.league.is_coed %}NYCS | NY Coed Soccer{% else %}NYCS | Mens Division{% endif %}
+{% endblock page_title %}
+
+{% block navclass %}dark{% endblock %}
+
+{% block navbar_itmes %}{% endblock %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+<section id="league" class="league">
+    <div class="container">
+        <div class="row">
+			<div class="col-md-offset-2 col-md-8 col-xs-12 col-sm-12">
+				<h2>{{ placeholder.get_name }}</h2></br>
+
+				<h4> Payment for {{ placeholder.league.paypal_account.company }} is processed by <b>PayPal</b>. To complete your registration, please make payment in the amount of <b>$ {{ placeholder.cost }}</b> by clicking the payment link below.</h4></br>
+
+				<table class="table table-striped">
+					<tbody>
+						<tr>
+							<td>League</td>
+							<td>{{ placeholder.league.name }}</td>
+						</tr>
+						<tr>
+							<td>Location</td>
+							<td>{{ placeholder.league.location.name }}</td>
+						</tr>
+						<tr>
+							<td>Team</td>
+							{% if placeholder.team %}
+							<td>{{ placeholder.team.name }}</td>
+							{% else %}
+							<td>{{ placeholder.team_name|default:'-- not defined yet --' }}</td>
+							{% endif %}
+						</tr>
+					</tbody>
+				</table>
+
+				<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+					{{ form }}
+					<div class="row">
+						<div class="col-md-6 col-xs-12 col-sm-12 text-center">
+							<input src="https://www.sandbox.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif" name="submit" alt="Buy it Now" border="0" type="image"><span></span>
+						</div>
+						<div class="col-md-6 col-xs-12 col-sm-12 text-center">
+							<a class="btn btn-custom btn-lg" href="{% url 'player_payment_cancel' placeholder.pk %}"> Cancel Payment</a>
+						</div>
+				</form>
+			</div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base_player.html' %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static "css/forms.css" %}">
+{% endblock css %}
+
+{% block content %}        
+
+<section id="signup" class="signup">
+			
+	<!--div class="login-page" -->
+	    <div class="container">
+	        <div class="row">
+				<div class="form registration">
+					<a href="{% url 'player' %}"><i class="fa fa-arrow-circle-left fa-3x" style="position: absolute; left: 10%;" aria-hidden="true"></i></a>
+					<h2>Profile Edit</h2>
+					<p>
+						{% if form.errors %}
+						{{ form.errors }}
+			            {% endif %}
+					</p>
+					</br>
+					<form class="register-form" action="." method="POST">
+						{% csrf_token %}
+
+						{{ form.first_name }}
+						{{ form.last_name }}
+						{{ form.state }}
+						{{ form.zip }}
+						{{ form.gender }}
+						{{ form.experience_level }}
+						{{ form.contact_phone }}
+						{{ form.emergency_contact_phone }}
+						{{ form.emergency_contact_name }}
+						
+						<button type="submit">Save</button>
+						<a href="{% url 'player' %}">or Cancel</a>
+					</form>
+
+				</div>
+				<div class="waiver">
+				{% autoescape off %}
+				{{ websiteIncludes.Waiver }}
+				{% endautoescape %}
+				</div>
+			</div>
+		</div>
+	<!--/div -->
+
+</section>
+
+{% endblock %}

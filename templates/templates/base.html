@@ -1,0 +1,209 @@
+{% load static %}
+
+{% load flatpages %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+    <!-- meta charec set -->
+    <meta charset="utf-8">
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- Page Title -->
+    <title>{% block page_title %}NYCS | NY Coed Soccer{% endblock page_title %}</title>
+    <!-- Meta Description -->
+    <meta name="description" content="Blue One Page Creative HTML5 Template">
+    <meta name="keywords" content="one page, single page, onepage, responsive, parallax, creative, business, html5, css3, css3 animation">
+    <meta name="author" content="martinriva.com">
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Google Font -->
+    
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- CSS
+    ================================================== -->
+    <!-- Fontawesome Icon font -->
+    <link rel="stylesheet" href="{% static "theme/css/font-awesome-47.min.css" %}">
+    <!-- Twitter Bootstrap css -->
+    <link rel="stylesheet" href="{% static "theme/css/bootstrap.min.css" %}">
+    <!-- jquery.fancybox  -->
+    <link rel="stylesheet" href="{% static "theme/css/jquery.fancybox.css" %}">
+    <!-- animate -->
+    <link rel="stylesheet" href="{% static "theme/css/animate.css" %}">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="{% static "theme/css/main.css" %}">
+    <!-- media-queries -->
+    <link rel="stylesheet" href="{% static "theme/css/media-queries.css" %}">
+
+    <!-- Modernizer Script for old Browsers -->
+    <script src="{% static "theme/js/modernizr-2.6.2.min.js" %}"></script>
+
+    {% block css %}
+    {% endblock css %}
+
+    <!-- Google Adsense -->
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9852889293008926",
+        enable_page_level_ads: true
+      });
+    </script>
+
+</head>
+    
+<body id="body">
+
+    <!-- preloader -->
+    <div id="preloader">
+        <img src="{% static "theme/img/preloader.gif" %}" alt="Preloader">
+    </div>
+    <!-- end preloader -->
+
+    <!-- 
+    Fixed Navigation
+    ==================================== -->
+    <header id="navigation" class="navbar-fixed-top navbar {% block navclass %}{% endblock %}">
+        <div class="container">
+            <div class="navbar-header">
+                <!-- responsive nav button -->
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars fa-2x"></i>
+                </button>
+                <!-- /responsive nav button -->
+                
+                <!-- logo -->
+                <a class="navbar-brand" href="/">
+                    <h1 id="logo">
+                        <img src="{% static "img/logo.png" %}" alt="NYCS">
+                        <p>Established in 2004</p>
+                    </h1>
+                </a>
+                <!-- /logo -->
+            </div>
+
+            <!-- main nav -->
+            <nav class="collapse navbar-collapse navbar-right" role="navigation">
+                <ul id="nav" class="nav navbar-nav">
+                    <li class="current"><a href="{% url 'home' %}">Home</a></li>
+                    {% block navbar_itmes %}
+                    <li><a href="/#schedules">Schedules</a></li>
+                    <li><a href="/#registration">Registration</a></li>
+                    <li><a href="/#tournaments">Tournaments</a></li>
+                    <li><a href="/#team">About Us</a></li>
+                    <!-- li><a href="/#features">Features</a></li -->
+                    <!-- li><a href="/#venues">Venues</a></li -->
+                    <li><a href="/#contact">Contact</a></li>
+                    {% get_flatpages as flatpages %}
+                    {% for page in flatpages %}
+                    <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+                    {% endfor %}
+                    {% endblock navbar_itmes %}
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'player' %}">My Account</a></li>
+                    <li class="visible-lg"><a href="#">|</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                    <li><a href="{% url 'login' %}">Sign In</a></li>
+                    {% endif %}
+                    {% if user.is_impersonate %}
+                    <li><a class="btn btn-primary" href="{% url 'impersonate-stop' %}">STOP</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <!-- /main nav -->
+            
+        </div>
+    </header>
+    <!--
+    End Fixed Navigation
+    ==================================== -->
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    
+    {% block content %}        
+    {% endblock  %}
+
+    {% block footer %}
+    <footer id="footer" class="footer">
+        <div class="container">
+            <div class="row">
+            
+                <div class="col-md-4 col-sm-6 col-xs-12 wow fadeInUp animated" data-wow-duration="500ms">
+                    <div class="footer-single">
+                        <img src="{% static "img/logo.png" %}" alt="">
+                        <p>NY Coed provides a welcoming environment for you to develop and hone your skills, exercise and meet new people. We play all-year round in various Indoor and Outdoor locations in New York City.</p>
+                    </div>
+                </div>
+            
+                <div class="col-md-3 col-md-offset-5 col-sm-6 col-xs-12 wow fadeInUp animated" data-wow-duration="500ms" data-wow-delay="600ms">
+                    <div class="footer-single">
+                        <h6>Social Networks</h6>
+                        <ul>
+                            <li><i class="fa fa-envelope fa-lg fa-footer"></i><a href="mailto:info@nycoedsoccer.com">info@nycoedsoccer.com</a></li>
+                            <li><i class="fa fa-twitter fa-lg fa-footer"></i><a href="https://twitter.com/NYCOEDSOCCER">Follow Us on Twitter</a></li>
+                            <li><i class="fa fa-facebook fa-lg fa-footer"></i><a href="https://www.facebook.com/NyCoedSoccer">Like Us on Facebook</a></li>
+                            <li><i class="fa fa-instagram fa-lg fa-footer"></i><a href="https://www.instagram.com/NyCoedSoccer">Follow Us on Instagram</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="copyright text-center">
+                        Copyright © 2017 <a href="https://nycoedsoccer.com/">NYCS</a>. All rights reserved.</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% endblock footer%}
+    
+    {% block js %}
+    <!-- Essential jQuery Plugins
+================================================== -->
+<!-- Main jQuery -->
+<script src="{% static "theme/js/jquery-1.11.1.min.js" %}"></script>
+<!-- Single Page Nav -->
+<script src="{% static "theme/js/jquery.singlePageNav.min.js" %}"></script>
+<!-- Twitter Bootstrap -->
+<script src="{% static "theme/js/bootstrap.min.js" %}"></script>
+<!-- jquery.fancybox.pack -->
+<script src="{% static "theme/js/jquery.fancybox.pack.js" %}"></script>
+<!-- jquery.mixitup.min -->
+<script src="{% static "theme/js/jquery.mixitup.min.js"  %}"></script>
+<!-- jquery.parallax -->
+<script src="{% static "theme/js/jquery.parallax-1.1.3.js" %}"></script>
+<!-- jquery.countTo -->
+<script src="{% static "theme/js/jquery-countTo.js" %}"></script>
+<!-- jquery.appear -->
+<script src="{% static "theme/js/jquery.appear.js" %}"></script>
+<!-- Custom Functions -->
+<script src="{% static "theme/js/custom.js" %}"></script>
+    
+<script type="text/javascript">
+    
+    $(document).ready(function(){
+        //HIDE MENU WHEN CLICK ON ELEMENT
+        $('#nav > li > a').on('click', {}, function(){
+            $('.navbar-collapse').removeClass('in');
+        })
+    });
+
+</script>
+    {% endblock js %}
+</body>
+</html>

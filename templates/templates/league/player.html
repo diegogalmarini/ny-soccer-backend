@@ -1,0 +1,25 @@
+{% extends '../base_player.html' %}
+
+{% block left_column %}
+<div class="player-menu">
+  <h2>Player Account</h2>
+
+  <ul class="list-group">
+    <li class="list-group-item">
+      <a href="{% url 'player_teams' %}"><b>My NY Coed</b></a> &mdash; Review your team and league registrations, past and present. Captains can also manage their rosters.
+    </li>
+    <li class="list-group-item">
+      <a href="{% url 'player_profile' %}"><b>My Profile</b></a> &mdash; Edit your profile to ensure it holds the most up-to-date information.
+    </li>
+    <li class="list-group-item">
+      <a href="{% url 'player_schedules' %}"><b>My Schedules</b></a> &mdash; Check your upcoming matches and export the date to your calendar.
+    </li>
+  {% if user.is_staff %}
+    <li class="list-group-item">
+      <a href="/admin/league"><b>League administration</b></a> &mdash; Because you are a staff user, you can click here to access the league administration system.
+    </li>
+  {% endif %}
+  </ul>
+</div>
+
+{% endblock left_column %}

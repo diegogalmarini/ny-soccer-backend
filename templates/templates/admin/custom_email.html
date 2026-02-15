@@ -1,0 +1,74 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n admin_static admin_modify %}
+
+{% load admin_urls %}
+
+{% block extrastyle %}
+
+{{ block.super }}
+<link href="https://cdn.quilljs.com/1.2.6/quill.snow.css" rel="stylesheet">
+
+{% endblock %}
+
+
+{% block extrahead %}
+{{ block.super }}
+<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+<script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=nwi64zi2n5nbpxbjmr9p6bo124nhol4an5xomtppkttu536y"></script>
+
+
+<script>var ed = tinymce.init({ 
+  selector:'#id_message',
+  height: 200,
+  theme: 'modern',
+  plugins: [
+    'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+    'searchreplace wordcount visualblocks visualchars code fullscreen',
+    'insertdatetime media nonbreaking save table contextmenu directionality',
+    'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help'
+  ],
+  toolbar1: 'preview media | undo redo | insert | forecolor backcolor bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+  image_advtab: true 
+});
+</script>
+
+<script type="text/javascript">
+  
+$(document).ready(function(){
+  $("#send-email").submit(function( event ) {
+    $("#id_message").text(tinymce.activeEditor.getContent());
+  });
+  var i = $("input[name='to_emails']");
+  i.attr('size', $(i).val().length - 10);
+})
+
+</script>
+
+{% endblock %}
+
+{% block breadcrumbs_last %}
+{% trans "Send Custom Email" %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-xs-12 col-sm-6 ">
+    {% if form %}
+      <form id="send-email" action="." method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h5> Sending <b>{{ total_emails }}</b> emails</h5><hr/><br>
+        {{ form.as_p }}
+        <input type="hidden" name="ids" value="{{ ids }}"/>
+        <input type="hidden" name="ct" value="{{ ct }}"/>
+        
+        <div class="submit-row">
+          <input type="submit" class="float-left" name="confirm" value="{% trans 'Send Email' %}">
+        </div>
+      </form>
+    {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

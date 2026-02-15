@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navclass %}dark{% endblock %}
+
+{% block navbar_itmes %}{% endblock %}
+
+{% block css %}
+{% endblock css %}
+
+{% block content %}
+<section id="league" class="league">
+    <div class="container">
+        <div class="row">
+        	<div class="col-md-offset-2 col-md-8 col-xs-12 col-sm-12">
+
+        	{% if league.is_league %}
+        	
+				<h2>TEAM REGISTRATION</h2></br>
+
+				<h4>To register a team, a payment is required.</h4></br>
+
+				<h4>As <b>Captain</b> you have the option of submitting a Team Fee which allows up to 16 players on the official roster.</h4></br>
+
+				<h4>Alternatively, you can submit an Individual Fee. Invited <b>teammates</b> will then have to submit their payments individually in order to confirm a slot on the roster.</h4></br>
+
+				<h4>Once your payment has been processed, you will be designated as the Captain and will have the ability to <b>invite</b> players to join your team.</h4></br>
+
+				<h4>Please only register a Team if you are confident of completing the minimum roster requirements. Our <b>Refund Policy</b> is detailed in the <a href="/faq">FAQ</a> section.</h4></br>
+				
+			{% elif league.is_tournament %}
+
+				<h2>TEAM REGISTRATION</h2></br>
+
+				<h4>To register a team, a payment is required.</h4></br>
+
+				<h4>As <b>Captain</b> you must submit a Team Fee. Unlike our Leagues, we cannot accept individual payments for the tournament.</h4></br>
+
+				<h4>Please only register a Team if you are confident of completing the minimum roster requirements. Our <b>Refund Policy</b> is detailed in the <a href="/faq">FAQ</a> section.</h4></br>
+
+			{% endif %}
+				<form id="regform" action="." method="post">
+					{% csrf_token %}
+					{{ form.as_p }}
+					<input class="btn-custom" value="Continue" type="submit">
+				</form>
+	        </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

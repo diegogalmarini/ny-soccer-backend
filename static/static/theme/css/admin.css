@@ -1,0 +1,16 @@
+.object-tools {
+    margin-top: -53px;
+}
+div#changelist {
+	position: relative;
+}
+div#changelist-filter {
+	position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    width: 240px;
+    background: #f8f8f8;
+    border-left: none;
+    margin: 0;
+}

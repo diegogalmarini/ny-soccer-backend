@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static "css/forms.css" %}">
+{% endblock css %}
+
+{% block content %}        
+
+<section id="signup" class="signup">
+			
+	<!--div class="login-page" -->
+	    <div class="container">
+	        <div class="row">
+				<div class="form registration">
+					<h2>Registration</h2>
+					<p>If you already have an account click <a href="{% url 'login' %}">here</a> to access your account</p><br/>
+					<p>
+						{% if form.errors %}
+						{{ form.errors }}
+			            {% endif %}
+					</p>
+					<form class="register-form" action="." method="POST">
+						{% csrf_token %}
+						<input placeholder="first name" name="first_name" autofocus="" required="" id="id_first_name" maxlength="254" type="text">
+						<input placeholder="last name" name="last_name" autofocus="" required="" id="id_last_name" maxlength="254" type="text">
+						<select name="state" id="id_state">
+							<option value="">---------</option>
+							<option value="AL">Alabama</option>
+							<option value="AK">Alaska</option>
+							<option value="AS">American Samoa</option>
+							<option value="AZ">Arizona</option>
+							<option value="AR">Arkansas</option>
+							<option value="CA">California</option>
+							<option value="CO">Colorado</option>
+							<option value="CT">Connecticut</option>
+							<option value="DE">Delaware</option>
+							<option value="DC">District of Columbia</option>
+							<option value="FL">Florida</option>
+							<option value="GA">Georgia</option>
+							<option value="GU">Guam</option>
+							<option value="HI">Hawaii</option>
+							<option value="ID">Idaho</option>
+							<option value="IL">Illinois</option>
+							<option value="IN">Indiana</option>
+							<option value="IA">Iowa</option>
+							<option value="KS">Kansas</option>
+							<option value="KY">Kentucky</option>
+							<option value="LA">Louisiana</option>
+							<option value="ME">Maine</option>
+							<option value="MD">Maryland</option>
+							<option value="MA">Massachusetts</option>
+							<option value="MI">Michigan</option>
+							<option value="MN">Minnesota</option>
+							<option value="MS">Mississippi</option>
+							<option value="MO">Missouri</option>
+							<option value="MT">Montana</option>
+							<option value="NE">Nebraska</option>
+							<option value="NV">Nevada</option>
+							<option value="NH">New Hampshire</option>
+							<option value="NJ">New Jersey</option>
+							<option value="NM">New Mexico</option>
+							<option value="NY" selected="selected">New York</option>
+							<option value="NC">North Carolina</option>
+							<option value="ND">North Dakota</option>
+							<option value="MP">Northern Mariana Islands</option>
+							<option value="OH">Ohio</option>
+							<option value="OK">Oklahoma</option>
+							<option value="OR">Oregon</option>
+							<option value="PA">Pennsylvania</option>
+							<option value="PR">Puerto Rico</option>
+							<option value="RI">Rhode Island</option>
+							<option value="SC">South Carolina</option>
+							<option value="SD">South Dakota</option>
+							<option value="TN">Tennessee</option>
+							<option value="TX">Texas</option>
+							<option value="UT">Utah</option>
+							<option value="VT">Vermont</option>
+							<option value="VI">Virgin Islands</option>
+							<option value="VA">Virginia</option>
+							<option value="WA">Washington</option>
+							<option value="WV">West Virginia</option>
+							<option value="WI">Wisconsin</option>
+							<option value="WY">Wyoming</option>
+						</select>
+						<input placeholder="zip code" name="zip" autofocus="" required="" id="id_zip" maxlength="10" type="text">
+
+						<input placeholder="email" name="email" autofocus="" required="" id="id_email" maxlength="254" type="email">
+
+						<input placeholder="confirm email" name="email_confirm" autofocus="" required="" id="id_email_confirm" maxlength="254" type="email">
+
+						<label for="id_gender_0"><input id="id_gender_0" value="M" name="gender" type="radio"> Male</label>
+
+						<label for="id_gender_1"><input id="id_gender_1" value="F" name="gender" type="radio"> Female</label>
+
+						<select name="experience_level" id="id_experience_level">
+							<option selected="selected" value="Beginner">Beginner</option>
+							<option value="Advanced Beginner">Advanced Beginner</option>
+							<option value="Intermediate">Intermediate</option>
+							<option value="Experienced">Experienced</option>
+						</select>
+
+						<input placeholder="contact phone" name="contact_phone" autofocus="" required="" id="id_contact_phone">
+
+						<input placeholder="emergency contact phone" name="emergency_contact_phone" autofocus="" required="" id="id_emergency_contact_phone">
+
+						<input placeholder="emergency contact name" name="emergency_contact_name" autofocus="" required="" id="id_emergency_contact_name" type="text">
+
+						<input placeholder="password" name="password"  required="" id="id_password" type="password">
+
+						<input placeholder="confirm password" name="password_confirm"  required="" id="id_password_confirm" type="password">
+
+						<div class="waiver-form">
+							<input name="waiver_confirm" required="true" id="weiver_confirm" type="checkbox" placeholder="Agree">
+							<span>By creating an account, you agree to the <a target="_blank" href="{% url 'terms' %}">terms and conditions</a> of the NY Coed Soccer player waiver.</span>
+						</div>
+
+						<button type="submit">Create</button>
+						<p class="message">Already registered? <a href="{% url 'login' %}">Sign In</a></p>
+					</form>
+
+				</div>
+
+			</div>
+		</div>
+	<!--/div -->
+
+</section>
+
+{% endblock %}

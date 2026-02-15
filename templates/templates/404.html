@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}        
+<section class="page404">
+	<div class="container">
+		<div class="row">
+			<img src="{% static 'img/404_img.png' %}" alt="error 404" class='four0four'>
+			<p class='oops'>Opps!</p>
+			<h2>We can't seems to find the page you're looking for.</h2>
+			<h4>Here are some helpful links instead:</h4>
+			<ul>
+				<li><a href="/#schedules">Schedules</a></li>
+                <li><a href="/#registration">Registration</a></li>
+                <li><a href="/#tournaments">Tournaments</a></li>
+                <li><a href="/#team">About Us</a></li>
+                <li><a href="/#contact">Contact</a></li>
+			</ul>
+		</div>	
+	</div>
+</section>
+{% endblock content %}

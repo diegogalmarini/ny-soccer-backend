@@ -1,0 +1,108 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n admin_static admin_modify %}
+
+{% load admin_urls %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static "theme/css/admin.css" %}">
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'player' %}">{% trans 'Back To Dashboard' %}</a>
+</div>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">NY Mens Division Admin</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <ul class="object-tools">
+    <!--li><a href="/admin/mens" class="export_link">Clear</a></li>
+    <li><a href="/admin/mens/?export=1';" class="export_link">Export All</a></li -->
+    <li><a href="javascript:window.location = window.location.href + '&export=1';" class="export_link">Export</a></li>
+  </ul>
+
+  <div class="module filtered" id="changelist">
+
+    <div id="changelist-filter">
+      <h2>Filter</h2>
+
+      <form action="." method="get">
+          {{ filter.form.as_p }}
+          <input type="submit" />
+      </form>
+
+    </div>
+    
+    <div class="results">
+      <table id="result_list">
+        <thead>
+          <tr>
+            <!-- th scope="col" class="action-checkbox-column">
+             <div class="text"><span><input type="checkbox" id="action-toggle"></span></div>
+             <div class="clear"></div>
+            </th -->
+            <th scope="col" class="sortable column-player_name sorted ascending">
+             <div class="sortoptions">
+               <a class="sortremove" href="?o=" title="Remove from sorting"></a>
+               <a href="?o=-2" class="toggle ascending" title="Toggle sorting"></a>
+             </div>
+             <div class="text"><a href="?o=-1">Player name</a></div>
+             <div class="clear"></div>
+            </th>
+            <th scope="col" class="column-email">
+             <div class="text"><span>Email</span></div>
+             <div class="clear"></div>
+            </th>
+            <th scope="col" class="column-gender">
+             <div class="text"><span>Gender</span></div>
+             <div class="clear"></div>
+            </th>
+            <th scope="col" class="sortable column-team_name">
+             <div class="text"><a href="?o=4.2">Team name</a></div>
+             <div class="clear"></div>
+            </th>
+            <th scope="col" class="sortable column-is_captain">
+             <div class="text"><a href="?o=5.2">Is captain</a></div>
+             <div class="clear"></div>
+            </th>
+            <th scope="col" class="sortable column-league">
+             <div class="text"><a href="?o=6.2">League</a></div>
+             <div class="clear"></div>
+            </th>
+            <th scope="col" class="column-season">
+             <div class="text"><span>Season</span></div>
+             <div class="clear"></div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for r in filter.qs %}
+            <tr class="row{{ forloop.count }}">
+              <td class="field-player_name">{{ r.player.full_name }}</td>
+              <td class="field-email">{{ r.player.email }}</td>
+              <td class="field-gender">{{ r.player.get_gender_display }}</td>
+              <td class="field-team_name">{{ r.team.name }}</td>
+              <td class="field-is_captain">
+                {% if r.is_captain %}
+                <img src="/static/admin/img/icon-yes.svg" alt="True">
+                {% else %}
+                <img src="/static/admin/img/icon-no.svg" alt="False">
+                {% endif %}
+              </td>
+              <td class="field-league nowrap">{{ r.league.name }} / {{ r.league.get_day_of_week }}</td>
+              <td class="field-season">{{ r.league.season }}</td>
+            </tr>
+        {% endfor %} 
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}        
+<section id="waiver" class="waiver">
+	<div class="container">
+		<div class="row">
+						
+			<div class="waiver">
+			{% autoescape off %}
+			{{ websiteIncludes.Waiver }}
+			{% endautoescape %}
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock content %}

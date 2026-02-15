@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block page_title %}
+{% if league.is_coed %}NYCS | NY Coed Soccer{% else %}NYCS | Mens Division{% endif %}
+{% endblock page_title %}
+
+{% block navclass %}{% endblock %}
+
+{% block navbar_itmes %}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static "css/forms.css" %}">
+{% endblock css %}
+
+{% block content %}
+<div class="page-cover"></div>
+<section id="league" class="league">
+    <div class="container">
+        <div class="row">
+            <div class="league-cover col-md-6 col-xs-12 col-sm-6 ">
+                <h4>{{ league.season.name }}</h4>
+                <h1>{{ league.name }}</h1>
+                <p>Registration Deadline: {{ league.registration_deadline }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="league-data-container col-md-3 col-xs-12 col-sm-6">
+                <i class="fa fa-map-marker fa-3x" aria-hidden="true"></i>
+                <h4>Location</h4>
+                <p>{{ league.location }}</p>
+                <p>{{ league.location.address }} <a href="{{ league.location.google_map_link }}" target="_blank"><i class="fa fa-paper-plane" aria-hidden="true"></i></a></p>
+            </div>
+            <div class="league-data-container col-md-3 col-xs-12 col-sm-6">
+                <i class="fa fa-clock-o fa-3x" aria-hidden="true"></i>
+                <h4>Game Time</h4>
+                <p>Weekday: {{ league.get_day_of_week_display }}</p>
+                <p>Game Duration: {{ league.game_duration|default:"30" }}'</p>
+                <p>{{ league.game_time }}</p>
+            </div>
+            <div class="league-data-container col-md-3 col-xs-12 col-sm-6">
+                <i class="fa fa-usd fa-3x" aria-hidden="true"></i>
+                <h4>Cost</h4>
+                <p>Player Cost: $ {{ league.registration_cost }} </p>
+                <p>Team Cost: $ {{ league.team_cost }}</p>
+            </div>
+            <div class="league-data-container col-md-3 col-xs-12 col-sm-6">
+                <i class="fa fa-ticket fa-3x" aria-hidden="true"></i>
+                <h4>Availability</h4>
+                {% if league.is_league or league.is_pool_competition or league.is_soccer_school %}
+                {% if league.is_coed %}
+                <i alt="Female Available Slots" class="fa fa-female fa-3x"></i><span class="gender-availability">{{ league.open_female_slot }}</span>
+                {% endif %}
+                <i alt="Team Available Slots" class="fa fa-male fa-3x"></i><span class="gender-availability">{{ league.open_male_slot }}</></span>
+                {% endif %}
+                {% if league.is_league or league.is_pool_competition or league.is_tournament %}
+                <i alt="Team Slots" class="fa fa-futbol-o fa-3x"></i><span class="gender-availability">{{ league.open_team_count }}</span>
+                {% endif %}
+            </div> 
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-xs-12 col-sm-6">
+                <div class="about-league">
+                    <h1>About the League</h1>
+                    {{ league.league_description|safe }}
+                </div>   
+            </div>
+            <div class="col-md-4 col-xs-12 col-sm-6">
+            {% if has_joined %}
+                <h1>You've already joined this league</h1>
+            {% else %}
+                <h1>Join This League Now</h1></br>
+                    {% if slot_available and league.is_league or slot_available and league.is_pool_competition or slot_available and league.is_soccer_school %}
+                <div><a class="btn-custom btn-xl" href="{% url 'player_reserve_league' league.id %}">Join as Free Agent</a></div>
+                    {% else %}
+                <div><a class="btn-custom btn-xl" href="#" disabled="disabled">Join as Free Agent</a></div>
+                    {% endif %}             
+                    {% if team_available and league.is_league or team_available and league.is_pool_competition or team_available and league.is_tournament %}
+                <div><a class="btn-custom btn-xl" href="{% url 'player_create_team' league.id %}">Create a Team</a></div>
+                    {% else %}
+                <div><a class="btn-custom btn-xl" href="#" disabled="disabled">Create a Team</a></div>
+                    {% endif %}
+                <!-- div>
+                    <a class="btn-custom btn-xl" data-toggle="modal" data-target="#myModal">Join your Team</a>
+                </div -->
+            {% endif %}
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Complete the following information</h4>
+      </div>
+        <form class="form join-league" action="." method="POST" id="join-form">
+          <div class="modal-body">
+            <div id="form-error"></div>
+            <input id='invitation_code' type="text" name="code" placeholder="Invitation Code">
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" id="join-team">Join Team</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+{{ block.super }}
+<script type="text/javascript">
+$(document).ready(function(){ 
+    $("#join-form").submit(function(event){
+        event.preventDefault();
+        msg = $('#form-error').html('');
+        key = $('#invitation_code').val();
+        if (key == '' || key == undefined){
+            msg.html('Please use the invitation code sent by your captain.');
+            return;
+        }
+        window.location = "/invitation/" + key;
+    });
+});
+</script>
+
+{% endblock js %}

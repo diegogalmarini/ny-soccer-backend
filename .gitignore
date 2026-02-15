@@ -1,0 +1,10 @@
+.env
+*.pyc
+__pycache__
+db.sqlite3
+media/
+build_log.txt
+.DS_Store
+*.swp
+*.bak
+local_settings.py

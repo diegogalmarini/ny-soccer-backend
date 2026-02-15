@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static "css/forms.css" %}">
+{% endblock css %}
+
+{% block content %}        
+
+<section id="login" class="login">
+			
+	<!--div class="login-page" -->
+	    <div class="container">
+	        <div class="row">
+				<div class="form">
+					<h2>Sign In</h2>
+					<p>Please sign into your player profile</p><br/>
+					<p>
+						{% if form.errors %}
+						{{ form.errors }}
+						{% endif %}
+					</p>
+					<form class="login-form" method='POST' action=".">
+						{% csrf_token %}
+						<input placeholder="username" name="username" autofocus="" required="" id="id_username" maxlength="254" type="text">
+						<input placeholder="password" name="password"  required="" id="id_password" type="password">
+						<button type="submit">Login </button>
+						<input type="hidden" name="next" value="{{ next }}" />
+						<p class="message">Forgot Password? <a href="{% url 'password_reset' %}">Reset here</a></p>
+						<p class="message">Not registered? <a href="{% url 'signup' %}">Create an account</a></p>
+					</form>
+				</div>
+			</div>
+		</div>
+	<!--/div -->
+
+</section>
+
+{% endblock %}
