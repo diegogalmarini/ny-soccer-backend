@@ -1403,45 +1403,6 @@ td {
   color: #5b646e;
 }
 
-/* Standings Table Fixes */
-.table.tablesorter {
-  border-collapse: separate;
-  border-spacing: 0;
-  width: 100%;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.table.tablesorter thead tr th {
-  color: #fff !important;
-  font-size: 14px !important;
-  font-weight: 700 !important;
-  border-bottom: 2px solid #c00 !important;
-  padding: 12px 8px !important;
-  background-color: #d71921 !important;
-  /* Original NYCS Red */
-  text-transform: uppercase;
-}
-
-.table.tablesorter tbody tr td {
-  padding: 10px 8px;
-  border-bottom: 1px solid #eee;
-  color: #333;
-  font-size: 14px;
-}
-
-.table-striped>tbody>tr:nth-of-type(odd) {
-  background-color: #fcfcfc !important;
-}
-
-.table-striped>tbody>tr:nth-of-type(even) {
-  background-color: #fff !important;
-}
-
-.table-hover tbody tr:hover {
-  background-color: #f5f5f5 !important;
-}
 
 /* Registration Section Refinement */
 #registration .league-item {

@@ -29,37 +29,7 @@
         {% if divisions_count > 1 or show_division_title %}
         <h4>{{ division.name }}</h4>
         {% endif %}
-        <table class="table tablesorter table-striped table-hover">
-          <thead>
-            <tr>
-              <th>Team</th>
-              <th class="center">PJ</th>
-              <th class="center">G</th>
-              <th class="center">E</th>
-              <th class="center">P</th>
-              <th class="center">GF</th>
-              <th class="center">GC</th>
-              <th class="center">DG</th>
-              <th class="center">Pts</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for team in division.table %}
-            <tr>
-              <td><span
-                  style="padding: 0 10px;margin-right: 10px;border: 1px solid #ccc;background: {{ team.0 }}"></span>{{
-                team.1 }}</td>
-              <td class="center">{{ team.2 }}</td>
-              <td class="center">{{ team.3 }}</td>
-              <td class="center">{{ team.4 }}</td>
-              <td class="center">{{ team.5 }}</td>
-              <td class="center">{{ team.6 }}</td>
-              <td class="center">{{ team.7 }}</td>
-              <td class="center">{{ team.8 }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+
         {% endfor %}
         {% endwith %}
 
