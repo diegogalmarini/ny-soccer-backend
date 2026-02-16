@@ -1,0 +1,26 @@
+{% extends '../base.html' %}
+
+{% block content %}
+
+<!--
+FAQ Page
+==================================== -->
+
+<section id="flatpage" class="flatpage">
+    <div class="container">
+        <div class="row">
+
+            <div class="sec-title text-center mb50 wow animated" data-wow-duration="500ms">
+                <h2>{{ flatpage.title }}</h2>
+                <div class="devider"><i class="fa fa-question-circle fa-2x"></i></div>
+            </div>
+
+            <div class="page-desc faq-content">
+                {{ flatpage.content|safe }}
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
