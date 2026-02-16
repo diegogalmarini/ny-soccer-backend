@@ -1341,3 +1341,7 @@ section#waiver {
   text-align: left;
   float: left;
 }
+#tournaments .sec-sub-title,
+#team .sec-sub-title {
+  color: #fff;
+}
