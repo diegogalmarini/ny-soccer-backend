@@ -29,16 +29,17 @@
         {% if divisions_count > 1 or show_division_title %}
         <h4>{{ division.name }}</h4>
         {% endif %}
-        <table id='table-{{ forloop.counter }}' class="table table-striped tablesorter">
+        <table class="table tablesorter table-striped table-hover">
           <thead>
             <tr>
               <th>Team</th>
-              <th class="center">W</th>
-              <th class="center">D</th>
-              <th class="center">L</th>
+              <th class="center">PJ</th>
+              <th class="center">G</th>
+              <th class="center">E</th>
+              <th class="center">P</th>
               <th class="center">GF</th>
-              <th class="center">GA</th>
-              <th class="center">GD</th>
+              <th class="center">GC</th>
+              <th class="center">DG</th>
               <th class="center">Pts</th>
             </tr>
           </thead>

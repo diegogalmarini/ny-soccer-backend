@@ -214,23 +214,25 @@ NYCS Registrations
                 <p>{{ flat_texts.registration|safe }}</p>
             </div>
 
-            {% for nb, leagues in open_registrations.items %}
-            <div class="col-md-4">
-                <figure class="league-item">
-                    <p class='neighborhood'>{{ nb|safe }}</p>
-                    <img src="{{ leagues.0.location.image.url }}" alt="">
-                    <figcaption class="league-overlay">
-
+            <div class="registration-list">
+                {% for nb, leagues in open_registrations.items %}
+                <div class="neighborhood-group mb40">
+                    <h3 class="neighborhood-title">{{ nb|safe }}</h3>
+                    <div class="row">
                         {% for league in leagues %}
-                        <div>
-                            <a href="{% url 'player_join_league' league.pk %}">{{ league.name }}</a>
-                            <span>{{ league.get_day_of_week }}</span>
+                        <div class="col-md-4 col-sm-6 mb20">
+                            <div class="league-card">
+                                <h5>{{ league.name }}</h5>
+                                <p class="league-day">{{ league.get_day_of_week }}</p>
+                                <a href="{% url 'player_join_league' league.pk %}" class="btn-register">Join /
+                                    Details</a>
+                            </div>
                         </div>
                         {% endfor %}
-                    </figcaption>
-                </figure>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
 </section>
