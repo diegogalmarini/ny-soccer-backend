@@ -7,157 +7,170 @@
 {% block navbar_itmes %}{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static "tablesorter/themes/blue/style.css" %}">
+<link rel="stylesheet" href="{% static 'tablesorter/themes/blue/style.css' %}">
 {% endblock css %}
 
 {% block content %}
 
 <section id="schedule" class="schedule">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-xs-12 col-sm-12 league-cover">
-                <h4>{{ league.season.name }}</h4>
-                <h1>{{ league.name }}</h1>
-                <p> {{ league.get_day_of_week_display }} @ <a style="color:#d71921" target="_blank" href="{{ league.location.google_map_link }}">{{ league.location }}</a> </p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-xs-12 col-sm-12">
-                {% with divisions_count=divisions|length %}
-                {% for division in divisions %}
-                {% if divisions_count > 1 or show_division_title %}
-                <h4>{{ division.name }}</h4>
-                {% endif %}
-                <table id='table-{{ forloop.counter }}' class="table table-striped tablesorter">
-                    <thead>
-                        <tr>
-                            <th>Team</th>
-                            <th class="center">W</th>
-                            <th class="center">D</th>
-                            <th class="center">L</th>
-                            <th class="center">GF</th>
-                            <th class="center">GA</th>
-                            <th class="center">GD</th>
-                            <th class="center">Pts</th>                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for team in division.table %}
-                      <tr>
-                        <td><span style="padding: 0 10px;margin-right: 10px;border: 1px solid #ccc;background: {{ team.0 }}"></span>{{ team.1 }}</td>
-                        <td class="center">{{ team.2 }}</td>
-                        <td class="center">{{ team.3 }}</td>
-                        <td class="center">{{ team.4 }}</td>
-                        <td class="center">{{ team.5 }}</td>
-                        <td class="center">{{ team.6 }}</td>
-                        <td class="center">{{ team.7 }}</td>
-                        <td class="center">{{ team.8 }}</td>
-                      </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                {% endfor %}
-                {% endwith %}
-
-                <!-- SCORER LEADER BOARD-->
-                {% if leading_scorers.count %}
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                  <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="heading">
-                      <h4 class="panel-title">
-                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="true" aria-controls="collapse">
-                          <p><b>GOLDEN BOOT - LEADING GOALSCORERS</b><span style="float: right;">+</span></p>
-                        </a>
-                      </h4>
-                    </div>
-                    <div id="collapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading">
-                      <div class="panel-body">
-                        {% for scorer in leading_scorers.all %}
-                        <div class="scorer">
-                            <p class="goals">{{ scorer.goals }}</p>
-                            <p class="player">{{ scorer.player.player }}</p>
-                            <p class="team">{{ scorer.player.team.name }}</p>
-                        </div>
-                        {% endfor %}
-                       </div>
-                    </div>
-                  </div>
-                </div>
-                {% endif %}
-                <!-- END LEADER BOARD -->
-
-            </div>
-            <div class="col-md-6 col-xs-12 col-sm-12">
-  
-                <div style="padding: 15px 0px; color: #56595d;">
-                  <div style="text-align: center;">
-                    <a href="https://taprm.com" target="_blank"><img class="taprm" style="top:-8px; width:150px" src='{% static "img/taprm-logo.png" %}'/></a> 
-                  </div>
-                  <span class="stext" style="font-size: 17px;">Summer Leagues in association with <a href="https://taprm.com" target="_blank"><b>TapRm</b></a>, a revolutionary online marketplace for beer, cider, hard seltzer and every drink in between.</span>
-                </div>
-
-                <p>Weather and League updates can be found on <a href="https://www.facebook.com/NyCoedSoccer"><b>Facebook</b></a>, <a href="https://twitter.com/NYCOEDSOCCER"><b>Twitter</b></a> or by emailing info@nycoedsoccer.com.</p></br>
-                <p>{{ league.game_location|safe }}</p></br>
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                {% for round  in rounds %}
-                  <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="heading{{ forloop.counter }}">
-                      <h4 class="panel-title">
-                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
-                          <p><b>{{ round.name }} : {{ round.date|date:"m.d.y" }}</b><span style="float: right;">+</span></p>
-                        </a>
-                      </h4>
-                    </div>
-                    <div id="collapse{{ forloop.counter }}" class="panel-collapse collapse {% if forloop.counter == 1%}in{% else %}{% endif %}" role="tabpanel" aria-labelledby="heading{{ forloop.counter }}">
-                      <div class="panel-body">
-                        {% if round.short_description %}
-                        <p>{{ round.short_description|default_if_none:"" }}</p></br>
-                        {% endif %}
-                        {% for match in round.matches.all %}
-                        {% if not match.is_draft %}
-                        <div class="match {% if match.was_cancelled %}strike{% endif %}">
-                            <span class="match-time">{{ match.time|time:"h:i A" }}</span><span class="visible-xs visible-sm">{{ match.comment|default:'-' }}</span>
-                            <span class="team team-local">{{ match.local }}</span>
-                            <span class="match-score">
-                                <span class="score">{{ match.score_local }}</span> vs 
-                                <span class="score">{{ match.score_visitor }}</span>
-                            </span>
-                            <span class="team team-visitor">{{ match.visitor }}</span>
-                            <span class="comment hidden-xs hidden-sm">{{ match.comment|default:'-' }}</span>
-                        </div>
-                        {% endif %}
-                        {% endfor %} 
-                      </div>
-                    </div>
-                  </div>
-                {% endfor %}
-                </div>
-            </div>
-        </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-xs-12 col-sm-12 league-cover">
+        <h4>{{ league.season.name }}</h4>
+        <h1>{{ league.name }}</h1>
+        <p> {{ league.get_day_of_week_display }} @ <a style="color:#d71921" target="_blank"
+            href="{{ league.location.google_map_link }}">{{ league.location }}</a> </p>
+      </div>
     </div>
+    <div class="row">
+      <div class="col-md-6 col-xs-12 col-sm-12">
+        {% with divisions_count=divisions|length %}
+        {% for division in divisions %}
+        {% if divisions_count > 1 or show_division_title %}
+        <h4>{{ division.name }}</h4>
+        {% endif %}
+        <table id='table-{{ forloop.counter }}' class="table table-striped tablesorter">
+          <thead>
+            <tr>
+              <th>Team</th>
+              <th class="center">W</th>
+              <th class="center">D</th>
+              <th class="center">L</th>
+              <th class="center">GF</th>
+              <th class="center">GA</th>
+              <th class="center">GD</th>
+              <th class="center">Pts</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for team in division.table %}
+            <tr>
+              <td><span
+                  style="padding: 0 10px;margin-right: 10px;border: 1px solid #ccc;background: {{ team.0 }}"></span>{{
+                team.1 }}</td>
+              <td class="center">{{ team.2 }}</td>
+              <td class="center">{{ team.3 }}</td>
+              <td class="center">{{ team.4 }}</td>
+              <td class="center">{{ team.5 }}</td>
+              <td class="center">{{ team.6 }}</td>
+              <td class="center">{{ team.7 }}</td>
+              <td class="center">{{ team.8 }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endfor %}
+        {% endwith %}
+
+        <!-- SCORER LEADER BOARD-->
+        {% if leading_scorers.count %}
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading">
+              <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse" aria-expanded="true"
+                  aria-controls="collapse">
+                  <p><b>GOLDEN BOOT - LEADING GOALSCORERS</b><span style="float: right;">+</span></p>
+                </a>
+              </h4>
+            </div>
+            <div id="collapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading">
+              <div class="panel-body">
+                {% for scorer in leading_scorers.all %}
+                <div class="scorer">
+                  <p class="goals">{{ scorer.goals }}</p>
+                  <p class="player">{{ scorer.player.player }}</p>
+                  <p class="team">{{ scorer.player.team.name }}</p>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        <!-- END LEADER BOARD -->
+
+      </div>
+      <div class="col-md-6 col-xs-12 col-sm-12">
+
+        <div style="padding: 15px 0px; color: #56595d;">
+          <div style="text-align: center;">
+            <a href="https://taprm.com" target="_blank"><img class="taprm"
+                style="top:-8px; width:150px; position: relative;" src="{% static 'img/taprm-logo.png' %}" /></a>
+          </div>
+          <span class="stext" style="font-size: 17px;">Leagues in association with <a href="https://taprm.com"
+              target="_blank"><b>TapRm</b></a>, a revolutionary online marketplace for beer, cider, hard seltzer and
+            every drink in between.</span>
+        </div>
+
+        <p style="font-size: 13px; color: #56595d;">Weather and League updates can be found on <a
+            href="https://www.facebook.com/NyCoedSoccer"><b>Facebook</b></a>, <a
+            href="https://twitter.com/NYCOEDSOCCER"><b>Twitter</b></a> or by emailing info@nycoedsoccer.com.</p></br>
+        <p style="font-size: 13px; color: #56595d;">{{ league.game_location|safe }}</p></br>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          {% for round in rounds %}
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading{{ forloop.counter }}">
+              <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ forloop.counter }}"
+                  aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
+                  <p><b>{{ round.name }} : {{ round.date|date:"m.d.y" }}</b><span style="float: right;">+</span></p>
+                </a>
+              </h4>
+            </div>
+            <div id="collapse{{ forloop.counter }}"
+              class="panel-collapse collapse {% if forloop.counter == 1%}in{% else %}{% endif %}" role="tabpanel"
+              aria-labelledby="heading{{ forloop.counter }}">
+              <div class="panel-body">
+                {% if round.short_description %}
+                <p>{{ round.short_description|default_if_none:"" }}</p></br>
+                {% endif %}
+                {% for match in round.matches.all %}
+                {% if not match.is_draft %}
+                <div class="match {% if match.was_cancelled %}strike{% endif %}">
+                  <span class="match-time">{{ match.time|time:"h:i A" }}</span><span class="visible-xs visible-sm">{{
+                    match.comment|default:'-' }}</span>
+                  <span class="team team-local">{{ match.local }}</span>
+                  <span class="match-score">
+                    <span class="score">{{ match.score_local }}</span> vs
+                    <span class="score">{{ match.score_visitor }}</span>
+                  </span>
+                  <span class="team team-visitor">{{ match.visitor }}</span>
+                  <span class="comment hidden-xs hidden-sm">{{ match.comment|default:'-' }}</span>
+                </div>
+                {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 {% endblock %}
 
 {% block js %}
 
 {{ block.super }}
-<script src="{% static "tablesorter/jquery.tablesorter.js" %}"></script>
+<script src="{% static 'tablesorter/jquery.tablesorter.js' %}"></script>
 
 <script type="text/javascript">
-$(document).ready(function(){ 
-    $(".table").tablesorter( {
-        sortList: [[7,1], [6,1], [4,1]],
-        headers: { 
-            0: { sorter: false }, 
-            1: { sorter: false },
-            2: { sorter: false },
-            3: { sorter: false },
-            5: { sorter: false }
-        } 
-    }).bind("sortEnd",function(e, table) {
+  $(document).ready(function () {
+    $(".table").tablesorter({
+      sortList: [[7, 1], [6, 1], [4, 1]],
+      headers: {
+        0: { sorter: false },
+        1: { sorter: false },
+        2: { sorter: false },
+        3: { sorter: false },
+        5: { sorter: false }
+      }
+    }).bind("sortEnd", function (e, table) {
       $("th.header").removeClass('header').removeClass('headerSortUp').off();
     });
-});
+  });
 </script>
 
 {% endblock js %}
