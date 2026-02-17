@@ -968,28 +968,59 @@ def player_emails(request):
 @staff_member_required
 def fix_db_encoding(request):
     """
-    Debug view to inspect League 421 and attempt save to capture traceback.
+    Final aggressive cleanup for League 421.
     """
     try:
         l = League.objects.get(pk=421)
         
-        debug_info = []
-        debug_info.append(f"League: {l.name} (ID: {l.id})")
-        debug_info.append(f"Repr Name: {repr(l.name)}")
-        debug_info.append(f"Repr Location: {repr(l.game_location)}")
-        debug_info.append(f"Repr Description: {repr(l.league_description)}")
+        log = []
+        log.append(f"Processing League {l.id}: {l.name}")
         
-        try:
-            l.save()
-            debug_info.append("Save SUCCESSFUL")
-        except Exception as e:
-            import traceback
-            debug_info.append(f"Save FAILED: {str(e)}")
-            debug_info.append(traceback.format_exc())
+        # Aggressive cleanup of ALL newline variants
+        import re
+        
+        def clean_text(text):
+            if not text: return text
+            original = text
+            # Replace functional newlines with a placeholder, then strip everything else, then restore
+            # Actually, standard Django Textarea should handle \r\n fine. 
+            # The issue is likely ' literal characters if they exist, or mixed line endings.
+            # Let's normalize to \n
             
-        return HttpResponse("<br>".join(debug_info))
+            # Step 1: Replace literal string representations of \r\n if they exist
+            text = text.replace('\\r\\n', '\n')
+            text = text.replace('\\r', '')
+            
+            # Step 2: Normalize actual control characters
+            text = text.replace('\r\n', '\n').replace('\r', '\n')
+            
+            # Step 3: Strip leading/trailing whitespace
+            text = text.strip()
+            
+            if text != original:
+                return text, True
+            return text, False
+
+        new_loc, loc_changed = clean_text(l.game_location)
+        if loc_changed:
+            l.game_location = new_loc
+            log.append("Fixed game_location")
+
+        new_desc, desc_changed = clean_text(l.league_description)
+        if desc_changed:
+            l.league_description = new_desc
+            log.append("Fixed league_description")
+            
+        if loc_changed or desc_changed:
+            l.save()
+            log.append("Saved changes successfully.")
+        else:
+            log.append("No changes needed (data already clean?).")
+            
+        return HttpResponse("<br>".join(log))
         
     except League.DoesNotExist:
         return HttpResponse("League 421 not found.")
     except Exception as e:
-        return HttpResponse(f"Error fetching league: {e}")
+        import traceback
+        return HttpResponse(f"Error: {e}<br>{traceback.format_exc()}")
