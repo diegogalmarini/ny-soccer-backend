@@ -275,9 +275,9 @@ class LeagueAdmin(admin.ModelAdmin):
     list_filter = ('season', DayOfWeekFilter, 'league_type', 'competition_type', SeasonYearListFilter,)
     #date_hierarchy = 'season__start_date'
     #inlines = [GoalScorerInline]
-    formfield_overrides = {
-        tinymce_models.HTMLField: {'widget': widgets.Textarea(attrs={'rows': 10, 'cols': 80})},
-    }
+    #formfield_overrides = {
+    #    tinymce_models.HTMLField: {'widget': widgets.Textarea(attrs={'rows': 10, 'cols': 80})},
+    #}
 
     fieldsets = [
         (None, {'fields':['season','name', 'paypal_account', 'featured_at_homepage', 'day_of_week', 'league_type', 'competition_type', 'status', 'order', 'location']}),
