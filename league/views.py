@@ -964,3 +964,26 @@ def player_emails(request):
         emails.append((player.full_name(), player.user.email))
     emails = list(set(emails))
     return HttpResponse(json.dumps(emails))
+
+@staff_member_required
+def fix_db_encoding(request):
+    """
+    Temporary view to clean \\r\\n sequences from League fields.
+    Run this once on production to fix the 500 error in Admin.
+    """
+    leagues = League.objects.all()
+    count = 0
+    for l in leagues:
+        changed = False
+        if l.game_location and '\r\n' in l.game_location:
+            l.game_location = l.game_location.replace('\r\n', '')
+            changed = True
+        if l.league_description and '\r\n' in l.league_description:
+            l.league_description = l.league_description.replace('\r\n', '')
+            changed = True
+        
+        if changed:
+            l.save()
+            count += 1
+            
+    return HttpResponse(f"Fixed encoding for {count} leagues.")
