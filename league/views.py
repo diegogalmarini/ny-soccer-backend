@@ -968,36 +968,7 @@ def player_emails(request):
 @staff_member_required
 def fix_db_encoding(request):
     from django.http import HttpResponse
-    """
-    Debug view to simulate Admin save and catch the 500 error.
-    """
-    try:
-        l = League.objects.get(pk=421)
-        
-        log = []
-        log.append(f"Debugging League {l.id} save process...")
-
-        # 1. Test __str__ method (used by LogEntry)
-        try:
-            s = str(l)
-            log.append(f"__str__ success: {s}")
-        except Exception as e:
-            log.append(f"__str__ FAILED: {e}")
-            import traceback
-            log.append(traceback.format_exc())
-
-        # 2. Test full_clean (used by Admin form validation)
-        try:
-            l.full_clean()
-            log.append("full_clean success")
-        except Exception as e:
-            log.append(f"full_clean FAILED: {e}")
-            import traceback
-            log.append(traceback.format_exc())
-
-        # 3. Test save (already tested, but good to re-verify) # Actually, let's skip actual save to avoid changing data if it works
-        # instead let's just inspect the fields again
-        log.append(f"Name repr: {repr(l.name)}")
+    return HttpResponse("Hello World - View is reachable")
         log.append(f"Desc repr: {repr(l.league_description)}")
         log.append(f"Loc repr: {repr(l.game_location)}")
 
