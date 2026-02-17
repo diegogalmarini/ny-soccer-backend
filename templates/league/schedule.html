@@ -30,6 +30,35 @@
         <h4>{{ division.name }}</h4>
         {% endif %}
 
+        <table class="table tablesorter standings-table">
+          <thead>
+            <tr>
+              <th style="text-align: left;">Team</th>
+              <th class="center">W</th>
+              <th class="center">D</th>
+              <th class="center">L</th>
+              <th class="center">GF</th>
+              <th class="center">GA</th>
+              <th class="center">GD</th>
+              <th class="center">Pts</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for team in division.table %}
+            <tr>
+              <td style="text-align: left;"><span class="team-color {{ team.0 }}"></span>{{ team.1 }}</td>
+              <td class="center">{{ team.2 }}</td>
+              <td class="center">{{ team.3 }}</td>
+              <td class="center">{{ team.4 }}</td>
+              <td class="center">{{ team.5 }}</td>
+              <td class="center">{{ team.6 }}</td>
+              <td class="center">{{ team.7 }}</td>
+              <td class="center">{{ team.8 }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
         {% endfor %}
         {% endwith %}
 

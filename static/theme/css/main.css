@@ -1516,3 +1516,80 @@ td {
   background: #b6141a;
   color: #fff;
 }
+
+/* Standings Table Parity Styles */
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background: transparent !important;
+}
+
+.standings-table th {
+  background-color: transparent !important;
+  color: #333 !important;
+  font-weight: 700 !important;
+  border-bottom: 2px solid #333 !important;
+  padding: 12px 10px !important;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.standings-table td {
+  padding: 12px 10px !important;
+  border-bottom: 1px solid #eee !important;
+  color: #555;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.standings-table .center {
+  text-align: center;
+}
+
+.standings-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.team-color {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* Common Team Colors */
+.team-color.red {
+  background-color: #d71921;
+}
+
+.team-color.blue {
+  background-color: #007bff;
+}
+
+.team-color.green {
+  background-color: #28a745;
+}
+
+.team-color.yellow {
+  background-color: #ffc107;
+}
+
+.team-color.black {
+  background-color: #000;
+}
+
+.team-color.white {
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.team-color.orange {
+  background-color: #fd7e14;
+}
+
+.team-color.purple {
+  background-color: #6f42c1;
+}
