@@ -274,7 +274,7 @@ class LeagueAdmin(admin.ModelAdmin):
     list_display_links = ('name',)
     list_filter = ('season', DayOfWeekFilter, 'league_type', 'competition_type', SeasonYearListFilter,)
     #date_hierarchy = 'season__start_date'
-    inlines = [GoalScorerInline]
+    #inlines = [GoalScorerInline]
     formfield_overrides = {
         tinymce_models.HTMLField: {'widget': widgets.Textarea(attrs={'rows': 10, 'cols': 80})},
     }
