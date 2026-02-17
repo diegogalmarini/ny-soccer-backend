@@ -106,7 +106,7 @@
         <p style="font-size: 13px; color: #56595d;">Weather and League updates can be found on <a
             href="https://www.facebook.com/NyCoedSoccer"><b>Facebook</b></a>, <a
             href="https://twitter.com/NYCOEDSOCCER"><b>Twitter</b></a> or by emailing info@nycoedsoccer.com.</p></br>
-        <p style="font-size: 13px; color: #56595d;">{{ league.game_location|striptags|cut:"\r"|cut:"\n"|cut:"\t"|safe }}
+        <p style="font-size: 13px; color: #56595d;">{{ league.game_location|cut:"\r"|cut:"\n"|cut:"\t"|safe }}
         </p></br>
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
           {% for round in rounds %}

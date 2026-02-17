@@ -567,6 +567,12 @@ def league_schedule(request, league_id):
 
     leading_scorers = GoalScorer.objects.filter(league=league).order_by('-goals')
     
+    # Temporary fix for display parity: Remove Day prefix from name if present
+    import re
+    # Remove "Tues/Thursday " or generic day prefixes
+    clean_name = re.sub(r'^(Mon|Tues|Wed|Thurs|Fri|Sat|Sun)[a-zA-Z/]*\s+', '', league.name)
+    league.name = clean_name
+
     return render(request, 'league/schedule.html', {
         'show_division_title': False, 
         'divisions': divisions,
