@@ -967,29 +967,45 @@ def player_emails(request):
 
 @staff_member_required
 def fix_db_encoding(request):
+    from django.http import HttpResponse
     """
-    Final aggressive cleanup for League 421.
+    Debug view to simulate Admin save and catch the 500 error.
     """
     try:
         l = League.objects.get(pk=421)
         
         log = []
-        log.append(f"Processing League {l.id}: {l.name}")
-        
-        # Aggressive cleanup of ALL newline variants
-        import re
-        
-        def clean_text(text):
-            if not text: return text
-            original = text
-            # Replace functional newlines with a placeholder, then strip everything else, then restore
-            # Actually, standard Django Textarea should handle \r\n fine. 
-            # The issue is likely ' literal characters if they exist, or mixed line endings.
-            # Let's normalize to \n
-            
-            # Step 1: Replace literal string representations of \r\n if they exist
-            text = text.replace('\\r\\n', '\n')
-            text = text.replace('\\r', '')
+        log.append(f"Debugging League {l.id} save process...")
+
+        # 1. Test __str__ method (used by LogEntry)
+        try:
+            s = str(l)
+            log.append(f"__str__ success: {s}")
+        except Exception as e:
+            log.append(f"__str__ FAILED: {e}")
+            import traceback
+            log.append(traceback.format_exc())
+
+        # 2. Test full_clean (used by Admin form validation)
+        try:
+            l.full_clean()
+            log.append("full_clean success")
+        except Exception as e:
+            log.append(f"full_clean FAILED: {e}")
+            import traceback
+            log.append(traceback.format_exc())
+
+        # 3. Test save (already tested, but good to re-verify) # Actually, let's skip actual save to avoid changing data if it works
+        # instead let's just inspect the fields again
+        log.append(f"Name repr: {repr(l.name)}")
+        log.append(f"Desc repr: {repr(l.league_description)}")
+        log.append(f"Loc repr: {repr(l.game_location)}")
+
+        return HttpResponse("<br>".join(log))
+
+    except Exception as e:
+        import traceback
+        return HttpResponse(f"Top level error: {e}<br><pre>{traceback.format_exc()}</pre>")
             
             # Step 2: Normalize actual control characters
             text = text.replace('\r\n', '\n').replace('\r', '\n')
