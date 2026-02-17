@@ -23,6 +23,7 @@ from league.widgets import MonthYearWidget
 from django.http import HttpResponseRedirect
 
 from tinymce.widgets import TinyMCE
+from tinymce import models as tinymce_models
 
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin, ImportMixin, ExportMixin
@@ -274,6 +275,10 @@ class LeagueAdmin(admin.ModelAdmin):
     list_filter = ('season', DayOfWeekFilter, 'league_type', 'competition_type', SeasonYearListFilter,)
     #date_hierarchy = 'season__start_date'
     inlines = [GoalScorerInline]
+    formfield_overrides = {
+        tinymce_models.HTMLField: {'widget': forms.Textarea(attrs={'rows': 10, 'cols': 80})},
+    }
+
     fieldsets = [
         (None, {'fields':['season','name', 'paypal_account', 'featured_at_homepage', 'day_of_week', 'league_type', 'competition_type', 'status', 'order', 'location']}),
         ('Cost information',
