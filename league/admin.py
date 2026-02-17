@@ -276,7 +276,7 @@ class LeagueAdmin(admin.ModelAdmin):
     #date_hierarchy = 'season__start_date'
     inlines = [GoalScorerInline]
     formfield_overrides = {
-        tinymce_models.HTMLField: {'widget': forms.Textarea(attrs={'rows': 10, 'cols': 80})},
+        tinymce_models.HTMLField: {'widget': widgets.Textarea(attrs={'rows': 10, 'cols': 80})},
     }
 
     fieldsets = [
