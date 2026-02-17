@@ -274,10 +274,10 @@ class LeagueAdmin(admin.ModelAdmin):
     list_display_links = ('name',)
     list_filter = ('season', DayOfWeekFilter, 'league_type', 'competition_type', SeasonYearListFilter,)
     #date_hierarchy = 'season__start_date'
-    #inlines = [GoalScorerInline]
-    #formfield_overrides = {
-    #    tinymce_models.HTMLField: {'widget': widgets.Textarea(attrs={'rows': 10, 'cols': 80})},
-    #}
+    inlines = [GoalScorerInline]
+    formfield_overrides = {
+        tinymce_models.HTMLField: {'widget': widgets.Textarea(attrs={'rows': 10, 'cols': 80})},
+    }
 
     fieldsets = [
         (None, {'fields':['season','name', 'paypal_account', 'featured_at_homepage', 'day_of_week', 'league_type', 'competition_type', 'status', 'order', 'location']}),
@@ -298,14 +298,6 @@ class LeagueAdmin(admin.ModelAdmin):
             'fields':['num_players_on_field', 'minimum_roster_size', 'minimum_num_women_on_field'],
         }),
     ]
-
-    def change_view(self, request, object_id, form_url='', extra_context=None):
-        try:
-            return super(LeagueAdmin, self).change_view(request, object_id, form_url, extra_context)
-        except Exception:
-            from django.http import HttpResponse
-            import traceback
-            return HttpResponse(f"Captured by change_view trap:<br><pre>{traceback.format_exc()}</pre>")
 
     def days_of_week(self, obj):
         return obj.get_day_of_week_display()

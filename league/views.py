@@ -964,39 +964,3 @@ def player_emails(request):
         emails.append((player.full_name(), player.user.email))
     emails = list(set(emails))
     return HttpResponse(json.dumps(emails))
-
-@staff_member_required
-def fix_db_encoding(request):
-    from django.http import HttpResponse
-    import traceback
-    
-    log = []
-    try:
-        l = League.objects.get(pk=421)
-        log.append(f"Loaded League {l.id}: {l.name}")
-        
-        # 1. Test __str__
-        try:
-            s = str(l)
-            log.append(f"__str__ OK: {s}")
-        except Exception:
-            log.append(f"__str__ FAILED:\n{traceback.format_exc()}")
-
-        # 2. Test full_clean()
-        try:
-            l.full_clean()
-            log.append("full_clean() OK")
-        except Exception:
-            log.append(f"full_clean() FAILED:\n{traceback.format_exc()}")
-
-        # 3. Test save()
-        try:
-            l.save()
-            log.append("save() OK")
-        except Exception:
-            log.append(f"save() FAILED:\n{traceback.format_exc()}")
-
-        return HttpResponse("<br>".join(log).replace("\n", "<br>"))
-
-    except Exception:
-        return HttpResponse(f"Fatal Error:\n{traceback.format_exc()}".replace("\n", "<br>"))
