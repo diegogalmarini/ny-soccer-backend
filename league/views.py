@@ -553,7 +553,13 @@ def league_schedule(request, league_id):
         for division in league.divisions.all().order_by('order'):
             teams = Team.objects.filter(league=league, division=division)
             table = get_league_table(teams, matches, league)
-            divisions.append({'name': division.name, 'table': table})    
+            divisions.append({'name': division.name, 'table': table})
+        
+        # Check for teams without division
+        teams_no_div = Team.objects.filter(league=league, division__isnull=True)
+        if teams_no_div.exists():
+            table = get_league_table(teams_no_div, matches, league)
+            divisions.append({'name': 'Unassigned', 'table': table})
     else:
         teams = Team.objects.filter(league=league)
         table = get_league_table(teams, matches, league)
