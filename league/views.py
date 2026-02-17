@@ -968,22 +968,28 @@ def player_emails(request):
 @staff_member_required
 def fix_db_encoding(request):
     """
-    Temporary view to clean \\r\\n sequences from League fields.
-    Run this once on production to fix the 500 error in Admin.
+    Debug view to inspect League 421 and attempt save to capture traceback.
     """
-    leagues = League.objects.all()
-    count = 0
-    for l in leagues:
-        changed = False
-        if l.game_location and '\r\n' in l.game_location:
-            l.game_location = l.game_location.replace('\r\n', '')
-            changed = True
-        if l.league_description and '\r\n' in l.league_description:
-            l.league_description = l.league_description.replace('\r\n', '')
-            changed = True
+    try:
+        l = League.objects.get(pk=421)
         
-        if changed:
+        debug_info = []
+        debug_info.append(f"League: {l.name} (ID: {l.id})")
+        debug_info.append(f"Repr Name: {repr(l.name)}")
+        debug_info.append(f"Repr Location: {repr(l.game_location)}")
+        debug_info.append(f"Repr Description: {repr(l.league_description)}")
+        
+        try:
             l.save()
-            count += 1
+            debug_info.append("Save SUCCESSFUL")
+        except Exception as e:
+            import traceback
+            debug_info.append(f"Save FAILED: {str(e)}")
+            debug_info.append(traceback.format_exc())
             
-    return HttpResponse(f"Fixed encoding for {count} leagues.")
+        return HttpResponse("<br>".join(debug_info))
+        
+    except League.DoesNotExist:
+        return HttpResponse("League 421 not found.")
+    except Exception as e:
+        return HttpResponse(f"Error fetching league: {e}")
