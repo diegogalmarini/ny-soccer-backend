@@ -299,6 +299,14 @@ class LeagueAdmin(admin.ModelAdmin):
         }),
     ]
 
+    def save_model(self, request, obj, form, change):
+        try:
+            super(LeagueAdmin, self).save_model(request, obj, form, change)
+        except Exception:
+            from django.http import HttpResponse
+            import traceback
+            raise Exception(traceback.format_exc())
+
     def days_of_week(self, obj):
         return obj.get_day_of_week_display()
 
