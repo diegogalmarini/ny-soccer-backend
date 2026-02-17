@@ -299,13 +299,13 @@ class LeagueAdmin(admin.ModelAdmin):
         }),
     ]
 
-    def save_model(self, request, obj, form, change):
+    def change_view(self, request, object_id, form_url='', extra_context=None):
         try:
-            super(LeagueAdmin, self).save_model(request, obj, form, change)
+            return super(LeagueAdmin, self).change_view(request, object_id, form_url, extra_context)
         except Exception:
             from django.http import HttpResponse
             import traceback
-            raise Exception(traceback.format_exc())
+            return HttpResponse(f"Captured by change_view trap:<br><pre>{traceback.format_exc()}</pre>")
 
     def days_of_week(self, obj):
         return obj.get_day_of_week_display()
