@@ -145,29 +145,29 @@ NYCS Active Leagues / schedules
 
 
             {% for item in active_leagues %}
-            <!-- league item -->
+            <!-- clean schedule item -->
             <div class="col-md-4 mb40">
-                <figure class="league-item">
-                    <p class='neighborhood text-center' style="font-weight: 700; font-size: 18px; margin-bottom: 10px;">
-                        {{ item.location|safe }}</p>
-                    <img src="{{ item.leagues.0.location.image.url }}" alt="" class="img-responsive">
-                    <!-- Removing broken overlay -->
-                    <div class="league-list-clean" style="margin-top: 10px; padding: 0 10px;">
+                <div class="nycs-clean-schedule-card" style="text-align: center;">
+                    <div style="font-weight: 700; font-size: 18px; margin-bottom: 10px; text-transform: uppercase;">{{
+                        item.location|safe }}</div>
+                    <img src="{{ item.leagues.0.location.image.url }}" alt="" class="img-responsive"
+                        style="margin-bottom: 10px;">
+                    <div class="nycs-clean-list" style="padding: 0 10px;">
                         <ul class="list-unstyled">
                             {% for league in item.leagues %}
                             <li style="margin-bottom: 5px;">
                                 <a href="{% url 'league_schedule' league.id %}"
                                     style="color: #333; font-weight: bold; text-decoration: underline;">{{ league.name
                                     }}</a>
-                                <span style="display: block; color: #666; font-size: 12px;">{{ league.get_day_of_week
+                                <span style="display: block; color: #666; font-size: 13px;">{{ league.get_day_of_week
                                     }}</span>
                             </li>
                             {% endfor %}
                         </ul>
                     </div>
-                </figure>
+                </div>
             </div>
-            <!-- end league item -->
+            <!-- end clean schedule item -->
             {% endfor %}
         </div>
     </div>
@@ -197,13 +197,13 @@ NYCS Registrations
 
             <div class="registration-list text-center">
                 {% for nb, leagues in open_registrations.items %}
-                <div class="neighborhood-group mb40">
-                    <h3 class="neighborhood-title"
+                <div class="nycs-clean-reg-group mb40">
+                    <h3
                         style="text-transform: uppercase; font-weight: 700; color: #333; font-size: 24px; margin-bottom: 5px;">
                         {{ nb|safe }}</h3>
-                    <div style="font-size: 13px; margin-bottom: 20px;">
+                    <div style="font-size: 14px; line-height: 1.6; margin-bottom: 25px;">
                         {% for league in leagues %}
-                        <div style="margin-bottom: 8px;">
+                        <div style="margin-bottom: 12px;">
                             <a href="{% url 'player_join_league' league.pk %}"
                                 style="font-weight: 700; color: #000; text-decoration: none;">{{ league.name|upper
                                 }}</a><br>
