@@ -170,14 +170,14 @@ NYCS Active Leagues / schedules
                 {% endfor %}
             </div>
 
-            {% for nb, leagues in active_leaguesX.items %}
+            {% for item in active_leagues %}
             <!-- league item -->
             <div class="col-md-4">
                 <figure class="league-item">
-                    <p class='neighborhood'>{{ nb|safe }}</p>
-                    <img src="{{ leagues.0.location.image.url }}" alt="">
+                    <p class='neighborhood'>{{ item.location|safe }}</p>
+                    <img src="{{ item.leagues.0.location.image.url }}" alt="">
                     <figcaption class="league-overlay">
-                        {% for league in leagues %}
+                        {% for league in item.leagues %}
                         <div>
                             <a href="{% url 'league_schedule' league.id %}">{{ league.name }}</a>
                             <span>{{ league.get_day_of_week }}</span>
@@ -204,32 +204,31 @@ NYCS Registrations
         <div class="row">
 
             <div class="sec-title text-center mb50 wow bounceInDown animated" data-wow-duration="500ms">
-                <!--h2>Registration Hub - {{ upcoming_season.name|default:"Upcoming Season" }}</h2-->
-                <div class="mtext">Registration</div><span class="stext"> in association with </span><a
-                    href="https://taprm.com" target="_blank"><img class="taprm"
-                        src='{% static "img/taprm-logo.png" %}' /></a>
+                <h2>WHO DO YOU PLAY WITH?</h2>
                 <div class="devider"><i class="fa fa-soccer-ball-o fa-2x"></i></div>
             </div>
-            <!-- div class="sec-sub-title registration-intro">
-                <p>{{ flat_texts.registration|safe }}</p>
-            </div -->
+
+            <div class="sec-sub-title registration-intro text-center mb50">
+                <p>Spring Leagues are now open for registration with Individual and Team Slots available (at the time of
+                    writing). We are awaiting news on further permit applications. But those listed below are confirmed.
+                </p>
+            </div>
 
             <div class="registration-list">
                 {% for nb, leagues in open_registrations.items %}
                 <div class="neighborhood-group mb40">
-                    <h3 class="neighborhood-title">{{ nb|safe }}</h3>
-                    <div class="row">
+                    <h3 class="neighborhood-title text-uppercase">{{ nb|safe }}</h3>
+                    <ul class="list-unstyled registration-text-list">
                         {% for league in leagues %}
-                        <div class="col-md-4 col-sm-6 mb20">
-                            <div class="league-card">
-                                <h5>{{ league.name }}</h5>
-                                <p class="league-day">{{ league.get_day_of_week }}</p>
-                                <a href="{% url 'player_join_league' league.pk %}" class="btn-register">Join /
-                                    Details</a>
-                            </div>
-                        </div>
+                        <li class="mb10">
+                            <strong>{{ league.name }}</strong>:
+                            {{ league.get_day_of_week }} {{ league.game_time|default:"" }}.
+                            Starts {{ league.season.start_date|date:"F jS"|default:"soon" }}.
+                            <a href="{% url 'player_join_league' league.pk %}" class="btn-register-link">[Join /
+                                Details]</a>
+                        </li>
                         {% endfor %}
-                    </div>
+                    </ul>
                 </div>
                 {% endfor %}
             </div>

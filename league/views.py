@@ -225,14 +225,29 @@ def welcome(request):
     # CORRECCIÓN: Usamos el QuerySet para obtener la temporada de forma segura.
     season = leagues_qs[0].season if leagues_qs.exists() else None
     
-    # lets sort it.
-    sorted_list = []
-    locations = set(Venue.objects.values_list('location', flat=True).order_by('order')) 
-    locations.update(set(ExternalLeague.objects.values_list('location', flat=True)))
-    for loc in locations:
-        if loc in league_list:
-            sorted_list.append({'location': loc, 'leagues': league_list[loc]})
+    # Clean league names and sort list
+    for loc, leagues in league_list.items():
+        for l in leagues:
+             # Remove Day prefix if present
+             import re
+             l.name = re.sub(r'^(Mon|Tues|Wed|Thurs|Fri|Sat|Sun)[a-zA-Z/]*\s+', '', l.name)
     
+    # Official Order: Brooklyn -> Chelsea -> UWS -> Williamsburg
+    official_order = [
+         "Brooklyn Bridge Park", 
+         "Chelsea", 
+         "Upper West Side", 
+         "Williamsburg"
+    ]
+    
+    sorted_list = []
+    # Match official names and order
+    for loc_name in official_order:
+        # Find matches in current league_list (which uses location.location names)
+        for nb, leagues in league_list.items():
+            if loc_name.lower() in nb.lower():
+                sorted_list.append({'location': nb, 'leagues': leagues})
+                break
     
     return render(request, 'main.html', {
         'active_leagues': sorted_list,
@@ -981,28 +996,52 @@ def sync_db_official(request):
         l.save()
     report.append(f"Disabled {count_old} old leagues from 2017.")
 
-    # 2. Fix Williamsburg location
+    # 4. Rename BIP Field to McCarren Park
     try:
-        w_venue = Venue.objects.filter(location__icontains='Williamsburg').first()
-        if w_venue:
-            w_leagues_misaligned = League.objects.filter(name__icontains='WILLIAMSBURG').exclude(location=w_venue)
-            count_w = w_leagues_misaligned.count()
-            for l in w_leagues_misaligned:
-                l.location = w_venue
-                l.save()
-            report.append(f"Fixed location for {count_w} Williamsburg leagues.")
-        else:
-            report.append("Error: Williamsburg venue not found.")
+        bip = Venue.objects.filter(location__icontains='BIP Field').first()
+        if bip:
+            bip.location = "Williamsburg: McCarren Park"
+            bip.save()
+            report.append("Renamed 'BIP Field' to 'Williamsburg: McCarren Park'.")
     except Exception as e:
-        report.append(f"Error fixing Williamsburg: {str(e)}")
+        report.append(f"Error renaming BIP Field: {str(e)}")
 
-    # 3. Disable specific legacy entries
-    legacy_cleanup = League.objects.exclude(status=STATUS_DISABLED).filter(name__icontains='Restored Legacy League')
-    count_legacy = legacy_cleanup.count()
-    for l in legacy_cleanup:
+    # 5. Fix other official names
+    official_names = {
+        'Brooklyn Bridge': 'Brooklyn Bridge Park: Pier 5',
+        'Chelsea': 'Chelsea Waterside Park',
+        'Upper West Side': 'Upper West Side PS 191'
+    }
+    for old_part, full_name in official_names.items():
+        v = Venue.objects.filter(location__icontains=old_part).first()
+        if v and v.location != full_name:
+            v.location = full_name
+            v.save()
+            report.append(f"Updated venue name to '{full_name}'.")
+
+    # 6. Set featured_at_homepage=False for non-official venues (like LES)
+    official_locations = ["Brooklyn", "Chelsea", "Upper West Side", "Williamsburg"]
+    all_venues = Venue.objects.all()
+    for v in all_venues:
+        is_official = any(loc.lower() in v.location.lower() for loc in official_locations)
+        if not is_official and v.featured_at_homepage:
+            v.featured_at_homepage = False
+            v.save()
+            report.append(f"Removed '{v.location}' from homepage schedules.")
+
+    # 7. Disable leagues specifically NOT in official site but appearing in production
+    # (e.g. Spring 2026 for Williamsburg which is Winter in official)
+    bad_leagues = League.objects.exclude(status=STATUS_DISABLED).filter(
+        models.Q(name__icontains='WILLIAMSBURG') & models.Q(name__icontains='Spring 2026')
+    ) | League.objects.exclude(status=STATUS_DISABLED).filter(
+        name__icontains='WILLIAMSBURG Winter 2025/26 Outdoor 7s (THU)'
+    )
+    
+    count_bad = bad_leagues.count()
+    for l in bad_leagues:
         l.status = STATUS_DISABLED
         l.save()
-    report.append(f"Disabled {count_legacy} additional legacy placeholder leagues.")
+    report.append(f"Disabled {count_bad} mismatching leagues (e.g. Williamsburg Spring 2026).")
 
     return HttpResponse("<br>".join(report))
     
