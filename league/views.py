@@ -957,6 +957,54 @@ def team_player_emails(request):
         emails.append((tp.player.full_name(), tp.player.user.email))
     emails = list(set(emails))
     return HttpResponse(json.dumps(emails))
+
+def sync_db_official(request):
+    """
+    Temporary view to synchronize database with official site:
+    1. Disable all leagues with '2017' in their name that are not already disabled.
+    2. Fix registration cost or info if needed (optional based on audit).
+    3. Correct venue for Williamsburg Winter 2025/26.
+    """
+    if not request.user.is_staff:
+        return HttpResponse("Unauthorized", status=403)
+
+    from .models import League, Venue, STATUS_DISABLED
+    from django.http import HttpResponse
+
+    report = []
+    
+    # 1. Disable 2017 leagues
+    old_leagues = League.objects.exclude(status=STATUS_DISABLED).filter(name__icontains='2017')
+    count_old = old_leagues.count()
+    for l in old_leagues:
+        l.status = STATUS_DISABLED
+        l.save()
+    report.append(f"Disabled {count_old} old leagues from 2017.")
+
+    # 2. Fix Williamsburg location
+    try:
+        w_venue = Venue.objects.filter(location__icontains='Williamsburg').first()
+        if w_venue:
+            w_leagues_misaligned = League.objects.filter(name__icontains='WILLIAMSBURG').exclude(location=w_venue)
+            count_w = w_leagues_misaligned.count()
+            for l in w_leagues_misaligned:
+                l.location = w_venue
+                l.save()
+            report.append(f"Fixed location for {count_w} Williamsburg leagues.")
+        else:
+            report.append("Error: Williamsburg venue not found.")
+    except Exception as e:
+        report.append(f"Error fixing Williamsburg: {str(e)}")
+
+    # 3. Disable specific legacy entries
+    legacy_cleanup = League.objects.exclude(status=STATUS_DISABLED).filter(name__icontains='Restored Legacy League')
+    count_legacy = legacy_cleanup.count()
+    for l in legacy_cleanup:
+        l.status = STATUS_DISABLED
+        l.save()
+    report.append(f"Disabled {count_legacy} additional legacy placeholder leagues.")
+
+    return HttpResponse("<br>".join(report))
     
 @user_passes_test(lambda u: u.is_staff)
 def player_emails(request):
