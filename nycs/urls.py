@@ -66,6 +66,7 @@ urlpatterns = [
     url(r'^league/(?P<slug>[-\w]+)/$', league_views.legacy_schedule, name='legacy_schedule'),
     url(r'^send-email/$', league_views.send_email, name='send_email'),
     url(r'^rules/$', TemplateView.as_view(template_name="rules.html"), name='rules'),
+    url(r'^test-db/$', league_views.test_db, name='test_db'),
 
 ]
 

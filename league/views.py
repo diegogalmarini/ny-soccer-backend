@@ -241,6 +241,15 @@ def welcome(request):
         'flat_texts': getIncludeDict(['Tournaments', 'About', 'Registration'])
     })
 
+from django.http import HttpResponse
+def test_db(request):
+    try:
+        league = League.objects.get(id=360)
+        return HttpResponse("ID 360 Name: " + league.name + " | Status: " + str(league.status))
+    except Exception as e:
+        return HttpResponse("Error: " + str(e))
+
+
 
 def terms(request):
     waiver = getIncludeDict(['Waiver'])
