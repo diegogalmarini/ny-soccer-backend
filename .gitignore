@@ -1,10 +1,34 @@
+# Environment and Secrets
 .env
+local_settings.py
+*.pem
+
+# Python
 *.pyc
-__pycache__
-db.sqlite3
+__pycache__/
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Agent Metadata (Local only)
+.agent/
+
+# Proactive protection (keep root clean)
+maintenance/
+scripts/
+*.sql
+*.txt
+*.json
+*.db
+!requirements.txt
+!requirements/*.txt
+
+# Static and Logs
 media/
-build_log.txt
+build_log*.txt
+error.log
 .DS_Store
 *.swp
 *.bak
-local_settings.py
