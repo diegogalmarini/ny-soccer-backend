@@ -143,32 +143,6 @@ NYCS Active Leagues / schedules
                 <div class="devider"><i class="fa fa-calendar fa-2x"></i></div>
             </div>
 
-            <div class="grid">
-                {% for data in active_leagues %}
-                <div class="league-neighborhood">
-                    <h3>{{ data.location }}</h3>
-                    {% for league in data.leagues %}
-                    {% if league.is_league and league.divisions.all %}
-                    {% for division in league.divisions.all %}
-                    <a href="{{ division.get_absolute_url }}">
-                        <div class="legacy-league">
-                            <span class='location'>{{ league.season.name }} | {{ league.get_day_of_week }}</span>
-                            <div class='name'>{{ league.name }} {{ division.name }}</div>
-                        </div>
-                    </a>
-                    {% endfor %}
-                    {% else %}
-                    <a href="{{ league.get_absolute_url }}">
-                        <div class="legacy-league">
-                            <span class='location'>{{ league.season.name }} | {{ league.get_day_of_week }}</span>
-                            <div class='name'>{{ league.name }}</div>
-                        </div>
-                    </a>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-                {% endfor %}
-            </div>
 
             {% for item in active_leagues %}
             <!-- league item -->
