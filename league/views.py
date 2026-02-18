@@ -200,7 +200,10 @@ def welcome(request):
     # CORRECCIÓN: Eliminamos la línea 'leagues = []' que sobreescribía los datos.
     # Usamos leagues_qs para el loop.
     for league in leagues_qs:
-        nb = league.location.location
+        if league.location:
+            nb = league.location.location
+        else:
+            nb = "Unknown Location"
         if league.featured_at_homepage: # SHOULD WE CHECK For league.is_active as well?
             if nb in league_list.keys():
                 league_list[nb].append(league)
@@ -304,9 +307,9 @@ def player_team_info(request, team_id):
         for m in upcoming_matches:
             matches.append(
                 {
-                    'team': m.visitor() if m.team_a.pk == team.pk else m.local(),
-                    'location': m.round.league.location.location,
-                    'date': m.date,
+                'team': m.visitor() if m.team_a.pk == team.pk else m.local(),
+                'location': m.round.league.location.location if m.round.league.location else "TBD",
+                'date': m.date,
                     'time': m.time,
                 }
             )
@@ -679,8 +682,8 @@ def player_schedules(request):
         starting_time = utc_starting_time.astimezone(utc_zone)
 
         date = '%sT%s/%sT%s' % (starting_time.strftime('%Y%m%d'), starting_time.strftime('%H%M00Z'), finish_time.strftime('%Y%m%d'), finish_time.strftime('%H%M00Z'))
-        details = quote('League: %s | Location: %s' % (r.round.league.name, r.round.league.location.location))
-        location = quote(r.round.league.location.address)
+        details = quote('League: %s | Location: %s' % (r.round.league.name, r.round.league.location.location if r.round.league.location else "TBD"))
+        location = quote(r.round.league.location.address if r.round.league.location else "TBD")
         calendar_link = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=%s&dates=%s&details=%s&location=%s&sf=true&output=xml" % (text, date, details, location)
         if r.round.league.is_league():
             league_url = reverse('league_schedule', args=[r.round.league.id]) if r.round.division is None else reverse('league_division_schedule', args=[r.round.league.id, r.round.division.id])
@@ -692,7 +695,7 @@ def player_schedules(request):
                 'league_id': r.round.league.id,
                 'league_url': league_url,
                 'league_name': r.round.league.name,
-                'location': r.round.league.location.location,
+                'location': r.round.league.location.location if r.round.league.location else "TBD",
                 'team_a': r.team_a.name,
                 'team_b': r.team_b.name,
                 'date': r.date,
