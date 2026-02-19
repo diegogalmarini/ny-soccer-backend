@@ -14,7 +14,7 @@ from django.urls import reverse
 from django.forms import fields, widgets, forms
 from league.forms import TeamForm, PlayerAdminForm
 from django.forms.fields import RegexField
-from django.utils.dates import WEEKDAYS
+from league.models import WEEKDAYS
 from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _

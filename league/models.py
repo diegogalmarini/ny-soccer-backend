@@ -4,7 +4,11 @@ from django.db import models
 from django.db.models import Q
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.utils.dates import WEEKDAYS, MONTHS
+from django.utils.dates import WEEKDAYS as _WEEKDAYS, MONTHS
+
+# MultiSelectField stores values as strings, but Django's WEEKDAYS uses int keys.
+# Convert to string keys so admin validation matches stored DB values.
+WEEKDAYS = {str(k): v for k, v in _WEEKDAYS.items()}
 
 from datetime import datetime
 from datetime import date
