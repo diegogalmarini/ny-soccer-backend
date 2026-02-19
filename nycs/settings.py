@@ -22,6 +22,12 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ["*"] # Standardized for Railway
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://ny-soccer-backend-production.up.railway.app",
+    "https://nycoedsoccer.com",
+    "https://www.nycoedsoccer.com",
+]
+
 DOMAIN_NAME = 'nycoedsoccer.com'
 SERVER_URL = '34.206.37.249'
 
