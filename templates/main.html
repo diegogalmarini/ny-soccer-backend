@@ -87,80 +87,6 @@
     </div>
 </section>
 
-<!-- VENUES SECTION -->
-<section id="venues" class="works clearfix">
-    <div class="container">
-        <div class="row">
-            <div class="sec-title text-center">
-                <h2>Our Venues</h2>
-                <div class="devider"><i class="fa fa-soccer-ball-o fa-2x"></i></div>
-            </div>
-            <div class="sec-sub-title text-center">
-                <p>We play on the best soccer fields in NY, venues vary from season to season but Chelsea and Williamsburg are our primary locations. In addition we play regularly on the LES, Murray Hill and Randall's Island while Cobble Hill and Park Slope feature during our Winter Indoor season. Exact field locations are confirmed at the opening of registration.</p>
-            </div>
-            <div class="work-filter wow fadeInRight animated" data-wow-duration="500ms">
-                <ul class="text-center">
-                    <li><a href="javascript:;" data-filter="all" class="active filter">All</a></li>
-                    <li><a href="javascript:;" data-filter=".chelsea" class="filter">Chelsea</a></li>
-                    <li><a href="javascript:;" data-filter=".williamsburg" class="filter">Williamsburg</a></li>
-                    <li><a href="javascript:;" data-filter=".randall" class="filter">Randall's Island</a></li>
-                    <li><a href="javascript:;" data-filter=".murray" class="filter">Murray Hill</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="project-wrapper">
-        <figure class="mix work-item chelsea">
-            <img src="{% static 'img/venues/venue-1.jpg' %}" alt="">
-            <figcaption class="overlay">
-                <a class="fancybox" rel="works" title="Chelsea Waterside Park" href="{% static 'img/venues/venue-1.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
-            </figcaption>
-        </figure>
-        <figure class="mix work-item chelsea">
-            <img src="{% static 'img/venues/venue-2.jpg' %}" alt="">
-            <figcaption class="overlay">
-                <a class="fancybox" rel="works" title="Chelsea Waterside Park" href="{% static 'img/venues/venue-2.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
-            </figcaption>
-        </figure>
-        <figure class="mix work-item randall">
-            <img src="{% static 'img/venues/venue-3.jpg' %}" alt="">
-            <figcaption class="overlay">
-                <a class="fancybox" rel="works" title="Randall's Island" href="{% static 'img/venues/venue-3.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
-            </figcaption>
-        </figure>
-        <figure class="mix work-item williamsburg">
-            <img src="{% static 'img/venues/venue-4.jpg' %}" alt="">
-            <figcaption class="overlay">
-                <a class="fancybox" rel="works" title="Williamsburg McCarren Park" href="{% static 'img/venues/venue-4.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
-            </figcaption>
-        </figure>
-        <figure class="mix work-item chelsea">
-            <img src="{% static 'img/venues/venue-5.jpg' %}" alt="">
-            <figcaption class="overlay">
-                <a class="fancybox" rel="works" title="Chelsea Waterside Park" href="{% static 'img/venues/venue-5.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
-            </figcaption>
-        </figure>
-        <figure class="mix work-item chelsea">
-            <img src="{% static 'img/venues/venue-6.jpg' %}" alt="">
-            <figcaption class="overlay">
-                <a class="fancybox" rel="works" title="Chelsea Waterside Park" href="{% static 'img/venues/venue-6.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
-            </figcaption>
-        </figure>
-        <figure class="mix work-item murray">
-            <img src="{% static 'img/venues/venue-7.jpg' %}" alt="">
-            <figcaption class="overlay">
-                <a class="fancybox" rel="works" title="Murray Hill" href="{% static 'img/venues/venue-7.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
-            </figcaption>
-        </figure>
-        <figure class="mix work-item murray">
-            <img src="{% static 'img/venues/venue-8.jpg' %}" alt="">
-            <figcaption class="overlay">
-                <a class="fancybox" rel="works" title="Murray Hill" href="{% static 'img/venues/venue-8.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
-            </figcaption>
-        </figure>
-    </div>
-</section>
-
 <!-- TOURNAMENTS SECTION -->
 <section id="tournaments" class="tournaments">
   <div class="parallax-overlay">
@@ -175,7 +101,7 @@
                 <div class="devider"><i class="fa fa-trophy fa-2x" aria-hidden="true"></i></div>
             </div>
             <div class="sec-sub-title wow animated pulse" data-wow-duration="500ms">
-                {{ flat_texts.tournaments|safe }}
+                <p>{{ flat_texts.tournaments|safe }}</p>
             </div>
         </div>
     </div>
@@ -191,7 +117,7 @@
                 <div class="devider"><i class="fa fa-heart fa-2x"></i></div>
             </div>
             <div class="sec-sub-title wow animated" data-wow-duration="500ms">
-                {{ flat_texts.about|safe }}
+                <p>{{ flat_texts.about|safe }}</p>
             </div>
         </div>
     </div>
