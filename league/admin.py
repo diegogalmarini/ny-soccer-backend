@@ -191,6 +191,7 @@ class LegacyLeagueAdmin(admin.ModelAdmin):
 class RoundAdmin(admin.ModelAdmin):
     list_filter = ['league', 'date']
     list_display = ('name', 'league', 'division_name', 'order', 'short_description', 'matches')
+    list_select_related = ('league', 'division')
     ordering = ['league', 'order']
     date_hierarchy = 'date'
 
@@ -213,6 +214,7 @@ admin.site.register(WebsiteIncludeText)
 class MatchAdmin(ImportMixin, admin.ModelAdmin):
     list_display = ('round', 'date', 'team_a', 'team_a_score', 'team_b_score', 'team_b', 'status')
     list_filter = [ActiveLeaguesFilter, 'date', 'time']
+    list_select_related = ('round__league', 'team_a', 'team_b')
     ordering = ('date',)
     date_hierarchy = 'date'
     raw_id_fields = ('team_a', 'team_b')
@@ -274,6 +276,8 @@ class LeagueAdmin(admin.ModelAdmin):
     list_display = ('order', 'name', 'season', 'days_of_week', 'league_type', 'competition_type', 'featured_at_homepage', 'status', 'custom_actions')
     list_display_links = ('name',)
     list_filter = ('season', DayOfWeekFilter, 'league_type', 'competition_type', SeasonYearListFilter,)
+    list_select_related = ('season', 'location', 'paypal_account')
+    raw_id_fields = ('paypal_account',)
     #date_hierarchy = 'season__start_date'
     inlines = [GoalScorerInline]
     formfield_overrides = {
@@ -333,7 +337,8 @@ class TeamPlayerAdmin(ExportMixin, admin.ModelAdmin):
     list_display=('__str__', 'player_name','gender','team_name','is_captain','league','season')
     list_display_links = ('__str__',)
     list_filter=['league__season', 'league__league_type', DayOfWeekFilter, 'league__location', 'is_captain', 'player__gender']
-    ordering=('player__last_name', 'player__first_name') 
+    list_select_related = ('player', 'team', 'league__season')
+    ordering=('player__last_name', 'player__first_name')
     search_fields=['team__name','player__first_name','player__last_name']
     actions = ['export_emails']
 
@@ -382,6 +387,7 @@ class TeamAdmin(admin.ModelAdmin):
     form=TeamForm
     list_display=('name', 'season_name', 'league','division_name','gender_information')
     list_filter=['league__season', 'division']
+    list_select_related = ('league__season', 'division')
     search_fields=['name']
     inlines = [TeamPlayerInline]
     fieldsets = [
