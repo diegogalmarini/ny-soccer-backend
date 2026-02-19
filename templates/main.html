@@ -15,178 +15,296 @@
 {% block content %}
 
 <!-- SLIDER SECTION -->
-<section id="home">
-    <div id="home-carousel" class="carousel slide" data-interval="false">
+<section id="slider">
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
-            <li data-target="#home-carousel" data-slide-to="0" class="active"></li>
-            <li data-target="#home-carousel" data-slide-to="1"></li>
-            <li data-target="#home-carousel" data-slide-to="2"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
         </ol>
-        <div class="carousel-inner">
-            <div class="item active" style="background-image: url('{% static "img/slider/slider-bg-1.jpg" %}')">
+        <div class="carousel-inner" role="listbox">
+            <div class="item active" style="background-position-x:50%; background-image: url('{% static "img/Slide1.jpg" %}');">
                 <div class="carousel-caption">
-                    <div class="animated bounceInRight">
-                        <h2>NY COED SOCCER <br>WE PLAY ALL YEAR ROUND.</h2>
-                        <p>We play all year round in various Indoor and Outdoor locations in New York City.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="item" style="background-image: url('{% static "img/slider/slider-bg-1.jpg" %}')">
-                <div class="carousel-caption">
-                    <div class="animated bounceInDown">
-                        <h2>NY COED SOCCER <br>WE PLAY ALL YEAR ROUND.</h2>
-                        <p>We play all year round in various Indoor and Outdoor locations in New York City.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="item" style="background-image: url('{% static "img/slider/slider-bg-1.jpg" %}')">
-                <div class="carousel-caption">
-                    <div class="animated bounceInUp">
-                        <h2>NY COED SOCCER <br>WE PLAY ALL YEAR ROUND.</h2>
-                        <p>We play all year round in various Indoor and Outdoor locations in New York City.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- SCHEDULES SECTION (V6 CLEAN) -->
-<section id="schedules" class="features" style="padding: 60px 0;">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <div class="sec-title">
-                    <h2>NYCS ACTIVE LEAGUES</h2>
-                    <p style="margin-bottom: 40px;">Click on the desired league to check the standings and schedule</p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            {% for item in active_leagues %}
-            <div class="col-md-4 wow fadeInUp" data-wow-duration="500ms" style="margin-bottom: 50px;">
-                <div style="text-align: center;">
-                    <!-- LOCATION HEADER -->
-                    <h3 style="font-weight: 700; font-size: 18px; margin-bottom: 15px; text-transform: uppercase;">
-                        {{ item.location|safe }}
-                    </h3>
-
-                    <!-- IMAGE -->
-                    <img src="{{ item.leagues.0.location.image_url }}" alt="Venue" class="img-responsive"
-                        style="margin: 0 auto 15px auto; border-radius: 4px;">
-
-                    <!-- LEAGUES LIST -->
-                    <ul class="list-unstyled" style="padding: 0;">
-                        {% for league in item.leagues %}
-                        <li style="margin-bottom: 10px;">
-                            <a href="{% url 'league_schedule' league.id %}"
-                                style="color: #333; font-weight: 700; text-decoration: underline; font-size: 15px;">
-                                {{ league.name }}
-                            </a>
-                            <div style="color: #666; font-size: 13px; margin-top: 2px;">{{ league.get_day_of_week }}
-                            </div>
-                        </li>
-                        {% endfor %}
+                    <a class="register-button" href="/login/">Register</a>
+                    <ul class="social-links text-center">
+                        <li><a href="https://twitter.com/NYCOEDSOCCER" target="_blank"><i class="fa fa-twitter fa-2x"></i></a></li>
+                        <li><a href="https://www.facebook.com/NyCoedSoccer" target="_blank"><i class="fa fa-facebook fa-2x"></i></a></li>
+                        <li><a href="mailto:info@nycoedsoccer.com" target="_blank"><i class="fa fa-envelope fa-2x"></i></a></li>
+                        <li><a href="https://www.instagram.com/NyCoedSoccer" target="_blank"><i class="fa fa-instagram fa-2x"></i></a></li>
                     </ul>
                 </div>
             </div>
-            {% endfor %}
         </div>
     </div>
 </section>
 
-<!-- REGISTRATION SECTION (V6 CLEAN - NO FILTERS) -->
-<section id="registration" class="works clearfix" style="padding: 60px 0; background-color: #f7f7f7;">
+<!-- SCHEDULES SECTION -->
+<section id="schedules" class="schedules">
     <div class="container">
         <div class="row">
-            <div class="col-md-12 text-center">
-                <div class="sec-title">
-                    <h2>WHO DO YOU PLAY WITH?</h2>
-                    <p style="margin-bottom: 40px;">Spring Leagues are now open for registration. Click on the link to
-                        register your team.</p>
-                </div>
+            <div class="sec-title text-center mb50 wow bounceInDown animated" data-wow-duration="500ms">
+                <div class="mtext">Schedules</div>
+                <span class="stext"> in association with </span>
+                <a href="https://taprm.com" target="_blank">
+                    <img class="taprm" src='{% static "img/taprm-logo.png" %}'/>
+                </a>
+                <div class="devider"><i class="fa fa-calendar fa-2x"></i></div>
             </div>
-        </div>
 
-        <div class="row text-center">
-            {% for nb, leagues in open_registrations.items %}
-            <div class="row mb40" style="margin-bottom: 50px;">
-                <div class="col-md-8 col-md-offset-2"> <!-- Centering column -->
-                    <h3
-                        style="text-transform: uppercase; font-weight: 700; color: #333; font-size: 24px; margin-bottom: 20px;">
-                        {{ nb|safe }}
-                    </h3>
-
-                    <div style="font-size: 15px; line-height: 1.8;">
-                        {% for league in leagues %}
-                        <div style="margin-bottom: 20px;">
-                            <a href="{% url 'player_join_league' league.pk %}"
-                                style="font-weight: 700; color: #000; text-decoration: none; font-size: 16px; text-transform: uppercase;">
-                                {{ league.name }}
-                            </a>
-                            <br>
-                            <span style="color: #444;">{{ league.get_day_of_week }}S {{ league.game_time }}</span>
-                        </div>
-                        {% endfor %}
+            <div class="grid">
+                {% for item in active_leagues %}
+                <div class="league-neighborhood">
+                    <h3>{{ item.location }}</h3>
+                    {% for league in item.leagues %}
+                    <a href="{{ league.get_absolute_url }}">
+                    <div class="legacy-league">
+                        <span class='location'>{{ league.season.name }} | {{ league.get_day_of_week }}</span>
+                        <div class='name'>{{ league.name }}</div>
                     </div>
+                    </a>
+                    {% endfor %}
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
+    </div>
+</section>
+
+<!-- REGISTRATION SECTION -->
+<section id="registration" class="registration">
+    <div class="container">
+        <div class="row">
+            <div class="sec-title text-center mb50 wow bounceInDown animated" data-wow-duration="500ms">
+                <div class="mtext">Registration</div>
+                <span class="stext"> in association with </span>
+                <a href="https://taprm.com" target="_blank">
+                    <img class="taprm" src='{% static "img/taprm-logo.png" %}'/>
+                </a>
+                <div class="devider"><i class="fa fa-soccer-ball-o fa-2x"></i></div>
+            </div>
+            <div class="sec-sub-title registration-intro">
+                {{ flat_texts.registration|safe }}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- VENUES SECTION -->
+<section id="venues" class="works clearfix">
+    <div class="container">
+        <div class="row">
+            <div class="sec-title text-center">
+                <h2>Our Venues</h2>
+                <div class="devider"><i class="fa fa-soccer-ball-o fa-2x"></i></div>
+            </div>
+            <div class="sec-sub-title text-center">
+                <p>We play on the best soccer fields in NY, venues vary from season to season but Chelsea and Williamsburg are our primary locations. In addition we play regularly on the LES, Murray Hill and Randall's Island while Cobble Hill and Park Slope feature during our Winter Indoor season. Exact field locations are confirmed at the opening of registration.</p>
+            </div>
+            <div class="work-filter wow fadeInRight animated" data-wow-duration="500ms">
+                <ul class="text-center">
+                    <li><a href="javascript:;" data-filter="all" class="active filter">All</a></li>
+                    <li><a href="javascript:;" data-filter=".chelsea" class="filter">Chelsea</a></li>
+                    <li><a href="javascript:;" data-filter=".williamsburg" class="filter">Williamsburg</a></li>
+                    <li><a href="javascript:;" data-filter=".randall" class="filter">Randall's Island</a></li>
+                    <li><a href="javascript:;" data-filter=".murray" class="filter">Murray Hill</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="project-wrapper">
+        <figure class="mix work-item chelsea">
+            <img src="{% static 'img/venues/venue-1.jpg' %}" alt="">
+            <figcaption class="overlay">
+                <a class="fancybox" rel="works" title="Chelsea Waterside Park" href="{% static 'img/venues/venue-1.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
+            </figcaption>
+        </figure>
+        <figure class="mix work-item chelsea">
+            <img src="{% static 'img/venues/venue-2.jpg' %}" alt="">
+            <figcaption class="overlay">
+                <a class="fancybox" rel="works" title="Chelsea Waterside Park" href="{% static 'img/venues/venue-2.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
+            </figcaption>
+        </figure>
+        <figure class="mix work-item randall">
+            <img src="{% static 'img/venues/venue-3.jpg' %}" alt="">
+            <figcaption class="overlay">
+                <a class="fancybox" rel="works" title="Randall's Island" href="{% static 'img/venues/venue-3.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
+            </figcaption>
+        </figure>
+        <figure class="mix work-item williamsburg">
+            <img src="{% static 'img/venues/venue-4.jpg' %}" alt="">
+            <figcaption class="overlay">
+                <a class="fancybox" rel="works" title="Williamsburg McCarren Park" href="{% static 'img/venues/venue-4.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
+            </figcaption>
+        </figure>
+        <figure class="mix work-item chelsea">
+            <img src="{% static 'img/venues/venue-5.jpg' %}" alt="">
+            <figcaption class="overlay">
+                <a class="fancybox" rel="works" title="Chelsea Waterside Park" href="{% static 'img/venues/venue-5.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
+            </figcaption>
+        </figure>
+        <figure class="mix work-item chelsea">
+            <img src="{% static 'img/venues/venue-6.jpg' %}" alt="">
+            <figcaption class="overlay">
+                <a class="fancybox" rel="works" title="Chelsea Waterside Park" href="{% static 'img/venues/venue-6.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
+            </figcaption>
+        </figure>
+        <figure class="mix work-item murray">
+            <img src="{% static 'img/venues/venue-7.jpg' %}" alt="">
+            <figcaption class="overlay">
+                <a class="fancybox" rel="works" title="Murray Hill" href="{% static 'img/venues/venue-7.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
+            </figcaption>
+        </figure>
+        <figure class="mix work-item murray">
+            <img src="{% static 'img/venues/venue-8.jpg' %}" alt="">
+            <figcaption class="overlay">
+                <a class="fancybox" rel="works" title="Murray Hill" href="{% static 'img/venues/venue-8.jpg' %}"><i class="fa fa-eye fa-lg"></i></a>
+            </figcaption>
+        </figure>
     </div>
 </section>
 
 <!-- TOURNAMENTS SECTION -->
-<section id="tournaments" class="service-item" style="padding: 60px 0;">
+<section id="tournaments" class="tournaments">
+  <div class="parallax-overlay">
     <div class="container">
-        <div class="row text-center">
-            <div class="sec-title">
-                <h2>TOURNAMENTS</h2>
+        <div class="row">
+            <div class="sec-title text-center wow fadeInUp animated" data-wow-duration="700ms">
+                <div class="mtext">Tournaments</div>
+                <span class="stext"> in association with </span>
+                <a href="https://taprm.com" target="_blank">
+                    <img class="taprm" src='{% static "img/taprm-logo-yellow.png" %}'/>
+                </a>
+                <div class="devider"><i class="fa fa-trophy fa-2x" aria-hidden="true"></i></div>
             </div>
-            <p>No Tournaments currently scheduled.</p>
+            <div class="sec-sub-title wow animated pulse" data-wow-duration="500ms">
+                {{ flat_texts.tournaments|safe }}
+            </div>
         </div>
     </div>
+  </div>
 </section>
 
-<!-- ABOUT US / TEAM SECTION -->
-<section id="team" class="team" style="padding: 60px 0; background-color: #f7f7f7;">
+<!-- ABOUT US SECTION -->
+<section id="team" class="team">
     <div class="container">
         <div class="row">
             <div class="sec-title text-center wow fadeInUp animated" data-wow-duration="700ms">
                 <h2>About Us</h2>
-                <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
-                <p>NY Coed Soccer (NYCS)</p>
+                <div class="devider"><i class="fa fa-heart fa-2x"></i></div>
             </div>
-            <div class="col-md-12 text-center">
-                <p class="lead">Established in 2004, NY Coed Soccer is New York's Premier Coed Soccer League.</p>
-                <p>We believe in Fair Play, Camaraderie and Safety.</p>
+            <div class="sec-sub-title wow animated" data-wow-duration="500ms">
+                {{ flat_texts.about|safe }}
             </div>
         </div>
     </div>
 </section>
 
 <!-- CONTACT SECTION -->
-<section id="contact" class="contact" style="padding: 60px 0;">
+<section id="contact" class="contact">
     <div class="container">
-        <div class="sec-title text-center wow fadeInUp animated" data-wow-duration="500ms">
-            <h2>Contact</h2>
-            <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
-            <p>Get in touch</p>
-        </div>
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                {% include 'contact_form.html' %}
+        <div class="row mb50">
+            <div class="sec-title text-center mb50 wow fadeInDown animated" data-wow-duration="500ms">
+                <h2>Lets get in touch!</h2>
+                <div class="devider"><i class="fa fa-envelope fa-2x"></i></div>
+            </div>
+            <div class="col-lg-5 col-md-4 col-sm-4 col-xs-12 sec-sub-title text-center wow animated" data-wow-duration="1000ms" style="margin: 0">
+                <h3>We are unable to deal with queries over the telephone. However feel free to contact us and we'll respond within 24 hours, invariably a lot sooner.</h3>
+                <h3>If it's a general question regarding Leagues open for registration, please register/sign in to your <a href="/login/">player profile</a></h3>
+            </div>
+            <div class="col-lg-7 col-md-8 col-sm-8 col-xs-12 wow fadeInDown animated" data-wow-duration="500ms" data-wow-delay="300ms">
+                <div class="contact-form">
+                    {% include 'contact_form.html' %}
+                    <div id="success" class="text-center" style="display:none">
+                        <p>Your message has been sent successfully.</p>
+                    </div>
+                    <div id="error" class="text-center" style="display:none">
+                        <p>Sorry, there was an error sending your message. Please try again later.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <div id="map_canvas" class="wow bounceInDown animated" data-wow-duration="500ms"></div>
 </section>
 
 <a href="javascript:void(0);" id="back-top"><i class="fa fa-angle-up fa-3x"></i></a>
 
-
-
 {% endblock content %}
 
 {% block js %}
+<!-- Google Map (must load before custom.js) -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCL7xWhk3rvQsjQCSKV3GeULm_Dq2tTOHU&sensor=false"></script>
 {{ block.super }}
+<!-- Contact form validation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.32/jquery.form.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
+<!-- jquery easing -->
+<script src="{% static 'theme/js/jquery.easing.min.js' %}"></script>
+<!-- wow.js -->
+<script src="{% static 'theme/js/wow.min.js' %}"></script>
+<!-- masonry -->
+<script src="{% static 'js/masonry.pkgd.min.js' %}"></script>
+
+<script>
+    var wow = new WOW ({
+        boxClass:     'wow',
+        animateClass: 'animated',
+        offset:       120,
+        mobile:       false,
+        live:         true
+    });
+    wow.init();
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('.grid').masonry({
+        itemSelector: '.league-neighborhood',
+    });
+
+    $('#nav > li > a').on('click', {}, function(){
+        $('.navbar-collapse').removeClass('in');
+    });
+});
+
+$(function(){
+    $('#contact-form').validate({
+        rules: {
+            name: { required: true, minlength: 2 },
+            email: { required: true, email: true },
+            message: { required: true }
+        },
+        messages: {
+            name: {
+                required: "come on, you have a name don't you?",
+                minlength: "your name must consist of at least 2 characters"
+            },
+            email: { required: "no email, no message" },
+            message: {
+                required: "um...yea, you have to write something to send this form.",
+                minlength: "thats all? really?"
+            }
+        },
+        submitHandler: function(form) {
+            var data = $(form).serialize();
+            $(form).ajaxSubmit({
+                type: "POST",
+                data: data,
+                url: "/send-email/",
+                success: function() {
+                    $('#contact-form :input').attr('disabled', 'disabled');
+                    $('#contact-form').fadeTo("slow", 0.15, function() {
+                        $(this).find(':input').attr('disabled', 'disabled');
+                        $(this).find('label').css('cursor','default');
+                        $('#success').fadeIn();
+                    });
+                },
+                error: function() {
+                    $('#contact-form').fadeTo("slow", 0.15, function() {
+                        $('#error').fadeIn();
+                    });
+                }
+            });
+        }
+    });
+});
+</script>
 {% endblock js %}
