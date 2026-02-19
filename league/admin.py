@@ -265,8 +265,8 @@ admin.site.register(Season, SeasonAdmin)
 
 class GoalScorerInline(admin.TabularInline):
     model = GoalScorer
-    #exclude = ('league',)
-    raw_id_fields = ("player",)
+    exclude = ('league',)
+    raw_id_fields = ("player", "division")
 
     # def get_queryset(self, request):
     #     qs = super(GoalScorerInline, self).get_queryset(request)
