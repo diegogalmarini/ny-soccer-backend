@@ -1,7 +1,8 @@
 
 from django import forms
 from django.forms import fields, widgets, ModelForm
-from django_localflavor_us.forms import USZipCodeField, USPhoneNumberField
+from localflavor.us.forms import USZipCodeField
+from phonenumber_field.formfields import PhoneNumberField
 from django.contrib.auth.models import User
 
 from league.models import Player, Team
@@ -146,10 +147,10 @@ class InfoForm(PlayerAdminForm):
 	password_confirm = forms.CharField(max_length=24, label="Password (confirm)", widget=forms.PasswordInput(render_value=False), required=False)
 	gender = forms.ChoiceField(choices=Player.GENDER,widget=forms.RadioSelect(), required=True)
 	emergency_contact_name = forms.CharField(max_length=80, label="Emergency contact name", required=True)
-	emergency_contact_phone = USPhoneNumberField(label="Emergency contact phone", required=True)
+	emergency_contact_phone = PhoneNumberField(label="Emergency contact phone", required=True)
 	#address = forms.CharField(max_length=80, required=True)
 	#city = forms.CharField(max_length=80, required=True)
-	contact_phone = USPhoneNumberField(required=True)
+	contact_phone = PhoneNumberField(required=True)
 	
 	class Meta:
 		model = Player

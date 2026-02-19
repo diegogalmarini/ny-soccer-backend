@@ -10,7 +10,7 @@ from datetime import datetime
 from datetime import date
 from datetime import timedelta
 
-from django_localflavor_us.models import USStateField
+from localflavor.us.models import USStateField
 from paypal.standard.ipn.models import PayPalIPN
 
 from phonenumber_field.modelfields import PhoneNumberField
@@ -158,7 +158,7 @@ class Season(models.Model):
 	
 
 class ExternalLeague(models.Model):
-	season = models.ForeignKey(Season)
+	season = models.ForeignKey(Season, on_delete=models.CASCADE)
 	name = models.CharField(max_length=128)
 	location = models.CharField(max_length=128)
 	day_of_week = MultiSelectField(choices=WEEKDAYS.items(), max_choices=3)
@@ -182,7 +182,7 @@ class ExternalLeague(models.Model):
 		return True
 
 class LegacyLeague(models.Model):
-	season = models.ForeignKey(Season)
+	season = models.ForeignKey(Season, on_delete=models.CASCADE)
 	name = models.CharField(max_length=128)
 	location = models.CharField(max_length=128)
 	day_of_week = MultiSelectField(choices=WEEKDAYS.items(), max_choices=3)
@@ -203,7 +203,7 @@ class LegacyLeague(models.Model):
 		return str.join(' & ', map(lambda x: x[:3].upper(), self.get_day_of_week_list()))
 
 class League(models.Model):
-	season = models.ForeignKey(Season)
+	season = models.ForeignKey(Season, on_delete=models.CASCADE)
 	name = models.CharField(max_length=80)
 	day_of_week = MultiSelectField(choices=WEEKDAYS.items(), max_choices=3)
 
@@ -222,7 +222,7 @@ class League(models.Model):
 	open_female_slot = models.PositiveSmallIntegerField(default=0, blank=True, null=True, verbose_name="number of free-agent women accepted")
 	open_male_slot = models.PositiveSmallIntegerField(default=0, blank=True, null=True, verbose_name="number of free-agent men accepted")
 	######## NEW FIELDS FROM HERE ##########
-	location = models.ForeignKey('Venue', null=True, blank=True)
+	location = models.ForeignKey('Venue', null=True, blank=True, on_delete=models.SET_NULL)
 	cover_description = models.CharField(max_length=80, null=True, blank=True)
 	image = models.ImageField(upload_to = 'leagues/', default = '/static/img/leagues/league-1.jpg')
 	game_duration = models.PositiveSmallIntegerField(default=30, null=True, blank=True)
@@ -230,7 +230,7 @@ class League(models.Model):
 	league_type = models.CharField(max_length=128, default=COED_LEAGUE, choices=LEAGUE_TYPE)
 	competition_type = models.CharField(max_length=128, default=LEAGUE_COMPETITION, choices=COMPETITION_TYPE)
 	featured_at_homepage = models.BooleanField(default=False)
-	paypal_account = models.ForeignKey('PayPalAccount', null=True, blank=True)
+	paypal_account = models.ForeignKey('PayPalAccount', null=True, blank=True, on_delete=models.SET_NULL)
 
 	class Meta:
 		ordering = ('-order',)
@@ -275,7 +275,7 @@ class League(models.Model):
 
 class Division(models.Model):
 	name = models.CharField(max_length=80)
-	league = models.ForeignKey(League, related_name='divisions')
+	league = models.ForeignKey(League, related_name='divisions', on_delete=models.CASCADE)
 	order = models.PositiveIntegerField(default=5)
 	
 	class Meta:
@@ -301,14 +301,14 @@ class HistoricalTeam(models.Model):
 		
 class Team(models.Model):
 	name = models.CharField(max_length=80)
-	league = models.ForeignKey(League, related_name='teams')
-	division = models.ForeignKey(Division, blank=True, null=True)
+	league = models.ForeignKey(League, related_name='teams', on_delete=models.CASCADE)
+	division = models.ForeignKey(Division, blank=True, null=True, on_delete=models.SET_NULL)
 	color_name = ColorField(max_length=40,blank=True)
-	historical_team = models.ForeignKey(HistoricalTeam, verbose_name="Historical Team Name", help_text="The historical team record allows a team's stats to be tracked from season to season without requiring the team's name to remain constant.	If none is specified, a new one will automatically be created.", blank=True, null=True)
+	historical_team = models.ForeignKey(HistoricalTeam, verbose_name="Historical Team Name", help_text="The historical team record allows a team's stats to be tracked from season to season without requiring the team's name to remain constant.	If none is specified, a new one will automatically be created.", blank=True, null=True, on_delete=models.SET_NULL)
 	administrator_notes = models.TextField(max_length=2000,blank=True)
 	players = models.ManyToManyField("Player", through="TeamPlayer")
 	
-	payment_transaction = models.ForeignKey(PayPalIPN, null=True, blank=True)
+	payment_transaction = models.ForeignKey(PayPalIPN, null=True, blank=True, on_delete=models.SET_NULL)
 	payment_status = models.IntegerField(choices=PAYMENT_STATUS, default=PAYMENT_UNPAID)
 	payment_type = models.IntegerField(choices=PAYMENT_TYPE, null=True, blank=True)
 	override_payment = models.BooleanField(default=False, help_text="By default, the 'Payment status' option is a reflection of the data the system has received from PayPal, and will be updated as PayPal receives new information about this payment. To manually specify payment status, check this box to keep the system from overwriting your input.")
@@ -371,7 +371,7 @@ class Player(models.Model):
 		(GENDER_M,'Male'),
 		(GENDER_F,'Female'),
 	)
-	user = models.ForeignKey(User)
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
 	status = models.IntegerField(choices=PLAYER_STATUS, default=STATUS_ACTIVE, null=True, blank=True)
 	first_name = models.CharField(max_length=40)
 	last_name = models.CharField(max_length=40)
@@ -400,11 +400,11 @@ class Player(models.Model):
 	
 	
 class TeamPlayer(models.Model):	 
-	team = models.ForeignKey(Team,null=True,blank=True)
-	player = models.ForeignKey(Player)
+	team = models.ForeignKey(Team,null=True,blank=True, on_delete=models.CASCADE)
+	player = models.ForeignKey(Player, on_delete=models.CASCADE)
 	is_captain = models.BooleanField(default=False)
-	league = models.ForeignKey(League)
-	payment_transaction = models.ForeignKey(PayPalIPN, null=True, blank=True)
+	league = models.ForeignKey(League, on_delete=models.CASCADE)
+	payment_transaction = models.ForeignKey(PayPalIPN, null=True, blank=True, on_delete=models.SET_NULL)
 	payment_status = models.IntegerField(choices=PAYMENT_STATUS, default=PAYMENT_UNPAID)
 	override_payment = models.BooleanField(default=False, help_text="By default, the 'Payment status' option is a reflection of the data the system has received from PayPal, and will be updated as PayPal receives new information about this payment. To manually specify payment status, check this box to keep the system from overwriting your input.")
 	payment_notes = models.TextField(blank=True, help_text="If you manually change the payment information, this field provides an opportunity for you to make internal notes about payment status.  It is not publicly visible.")
@@ -470,9 +470,9 @@ class TeamPlayer(models.Model):
 
 class PaymentPlaceholder(models.Model):
 	placeholder_type = models.IntegerField(choices=PAYMENT_PLACEHOLDER_TYPE)
-	player = models.ForeignKey(Player)
-	league = models.ForeignKey(League)
-	team = models.ForeignKey(Team, null=True, blank=True)
+	player = models.ForeignKey(Player, on_delete=models.CASCADE)
+	league = models.ForeignKey(League, on_delete=models.CASCADE)
+	team = models.ForeignKey(Team, null=True, blank=True, on_delete=models.SET_NULL)
 	team_name = models.CharField(max_length=80, blank=True)
 	cost = models.CharField(max_length=20)
 	timestamp = models.DateTimeField(auto_now_add=True)
@@ -633,9 +633,9 @@ class PaymentPlaceholder(models.Model):
 
 
 class Round(models.Model):
- 	league = models.ForeignKey(League)
+ 	league = models.ForeignKey(League, on_delete=models.CASCADE)
  	date = models.DateTimeField()
- 	division = models.ForeignKey(Division, null=True, blank=True)
+ 	division = models.ForeignKey(Division, null=True, blank=True, on_delete=models.SET_NULL)
  	name = models.CharField(max_length=128, default='ROUND')
  	order = models.PositiveIntegerField(default=1)
  	short_description = models.CharField(max_length=255, null=True, blank=True)
@@ -650,9 +650,9 @@ class Round(models.Model):
 
 class Match(models.Model):
 	#league = models.ForeignKey(League)
-	round = models.ForeignKey(Round, related_name='matches', null=True, blank=True)
-	team_a = models.ForeignKey(Team, related_name='match_local', null=True, blank=True)
-	team_b = models.ForeignKey(Team, related_name='match_visitor', null=True, blank=True)
+	round = models.ForeignKey(Round, related_name='matches', null=True, blank=True, on_delete=models.SET_NULL)
+	team_a = models.ForeignKey(Team, related_name='match_local', null=True, blank=True, on_delete=models.SET_NULL)
+	team_b = models.ForeignKey(Team, related_name='match_visitor', null=True, blank=True, on_delete=models.SET_NULL)
 	team_a_placeholder = models.CharField(max_length=128, null=True, blank=True)
 	team_b_placeholder = models.CharField(max_length=128, null=True, blank=True)
 	date = models.DateField()
@@ -708,9 +708,9 @@ class Venue(models.Model):
 		
 
 class GoalScorer(models.Model):
-	league = models.ForeignKey(League)
-	division = models.ForeignKey(Division, blank=True, null=True)
-	player = models.ForeignKey(TeamPlayer)
+	league = models.ForeignKey(League, on_delete=models.CASCADE)
+	division = models.ForeignKey(Division, blank=True, null=True, on_delete=models.SET_NULL)
+	player = models.ForeignKey(TeamPlayer, on_delete=models.CASCADE)
 	goals = models.IntegerField(default=0)
 
 

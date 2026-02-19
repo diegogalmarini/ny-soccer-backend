@@ -9,14 +9,14 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.forms import fields, widgets, forms
 from league.forms import TeamForm, PlayerAdminForm
 from django.forms.fields import RegexField
 from django.utils.dates import WEEKDAYS
 from django.utils.html import format_html_join
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from league.models import *
 from league.widgets import MonthYearWidget
