@@ -51,7 +51,7 @@
     </div>
 </section>
 
-<!-- SCHEDULES SECTION (V5 CLEAN) -->
+<!-- SCHEDULES SECTION (V6 CLEAN) -->
 <section id="schedules" class="features" style="padding: 60px 0;">
     <div class="container">
         <div class="row">
@@ -95,7 +95,7 @@
     </div>
 </section>
 
-<!-- REGISTRATION SECTION (V5 CLEAN) -->
+<!-- REGISTRATION SECTION (V6 CLEAN - NO FILTERS) -->
 <section id="registration" class="works clearfix" style="padding: 60px 0; background-color: #f7f7f7;">
     <div class="container">
         <div class="row">
@@ -121,12 +121,11 @@
                         {% for league in leagues %}
                         <div style="margin-bottom: 20px;">
                             <a href="{% url 'player_join_league' league.pk %}"
-                                style="font-weight: 700; color: #000; text-decoration: none; font-size: 16px;">
-                                {{ league.name|upper }}
+                                style="font-weight: 700; color: #000; text-decoration: none; font-size: 16px; text-transform: uppercase;">
+                                {{ league.name }}
                             </a>
                             <br>
-                            <span style="color: #444;">{{ league.get_day_of_week }}S {{ league.game_time|default:""
-                                }}</span>
+                            <span style="color: #444;">{{ league.get_day_of_week }}S {{ league.game_time }}</span>
                         </div>
                         {% endfor %}
                     </div>
@@ -184,7 +183,7 @@
 
 <a href="javascript:void(0);" id="back-top"><i class="fa fa-angle-up fa-3x"></i></a>
 
-<!-- VER V5 CHECK -->
+<!-- VER V6 CHECK -->
 
 {% endblock content %}
 
