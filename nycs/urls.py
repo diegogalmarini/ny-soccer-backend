@@ -39,7 +39,7 @@ urlpatterns = [
     url(r'^league/(?P<league_id>\d+)/schedule/$', league_views.league_schedule, name="league_schedule"),
     # Temporary DB Fix URL (Removed)
     # url(r'^fix-encoding/$', league_views.fix_db_encoding, name='fix_encoding'),
-    url(r'^sync-db-official/$', league_views.sync_db_official, name='sync_db_official'),
+
     url(r'^league/(?P<league_id>\d+)/division/(?P<division_id>\d+)/schedule/$', league_views.league_division_schedule, name="league_division_schedule"),
     url(r'^league/(?P<league_id>\d+)/clone/$', league_views.league_clone, name="league_clone"),
     url(r'^league/(?P<league_id>\d+)/clone-premiership/$', league_views.league_create_premiership, name="league_create_premiership"),
