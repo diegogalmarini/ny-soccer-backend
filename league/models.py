@@ -240,7 +240,7 @@ class League(models.Model):
 		ordering = ('-order',)
 	
 	def __str__(self):
-		return self.name + " " + self.get_day_of_week_display() + self.season.seasonabbrev()
+		return self.name + " " + self.get_day_of_week() + self.season.seasonabbrev()
 	
 	def get_day_of_week(self):
 		return str.join(' & ', map(lambda x: x[:3].upper(), self.get_day_of_week_list()))

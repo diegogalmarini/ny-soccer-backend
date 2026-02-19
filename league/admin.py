@@ -301,7 +301,7 @@ class LeagueAdmin(admin.ModelAdmin):
     ]
 
     def days_of_week(self, obj):
-        return obj.get_day_of_week_display()
+        return obj.get_day_of_week()
 
     def custom_actions(self, obj):
         li1 = "<li><a href='%s'>Clone</a></li>" % (reverse('league_clone', args=[obj.pk]))
