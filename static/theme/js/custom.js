@@ -155,5 +155,7 @@ function initialize() {
 
 }
 
-google.maps.event.addDomListener(window, "load", initialize);
+if (typeof google !== 'undefined' && google.maps) {
+    google.maps.event.addDomListener(window, "load", initialize);
+}
 // ========== END GOOGLE MAP ========== //

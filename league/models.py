@@ -702,7 +702,14 @@ class Venue(models.Model):
 	image = models.ImageField(upload_to = 'venues/', default = '/static/img/venues/venue-1.jpg')
 	google_map_link = models.URLField(blank=True, null=True)
 	order = models.PositiveIntegerField(default=5)
-	
+
+	@property
+	def image_url(self):
+		"""Return correct URL whether image is a static default or an uploaded file."""
+		if self.image and self.image.name and 'static/' not in self.image.name:
+			return self.image.url
+		return '/static/img/venues/venue-1.jpg'
+
 	def __str__(self):
 		return self.name
 		
