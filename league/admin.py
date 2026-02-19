@@ -3,6 +3,7 @@ from datetime import date
 #from multiselectfield.admin import msf_filter
 
 from django import forms
+from django.conf import settings
 from django.db.models import Count
 from django.contrib import admin
 from django.contrib.auth.models import User

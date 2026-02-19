@@ -437,7 +437,7 @@ class TeamPlayer(models.Model):
 		if self.payment_transaction is not None and not self.override_payment:
 			if self.payment_transaction.payment_status == "Completed" and not self.payment_transaction.flag:
 				self.payment_status = PAYMENT_APPROVED
-			elif self.payment_transaction.payment_status == "Pending" or (self.payment_transaction.payment_status == "Completed" and sender.flag):
+			elif self.payment_transaction.payment_status == "Pending" or (self.payment_transaction.payment_status == "Completed" and self.payment_transaction.flag):
 				self.payment_status = PAYMENT_PENDING
 			else:
 				self.payment_status = PAYMENT_REJECTED
