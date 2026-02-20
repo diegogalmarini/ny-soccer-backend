@@ -37,3 +37,4 @@ six==1.16.0
 simplejson==3.19.3
 tablib==3.5.0
 diff-match-patch==20230430
+resend==2.22.0

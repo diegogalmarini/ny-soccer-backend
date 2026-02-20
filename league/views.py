@@ -757,22 +757,24 @@ def player_team_pay(request, team_id):
 
 @csrf_exempt
 def send_email(request):
-    from django.core.mail import EmailMessage
+    import resend
 
+    resend.api_key = settings.RESEND_API_KEY
     to_email = settings.DEFAULT_EMAIL
     message = request.POST.get('message', 'no-message')
     from_email = request.POST.get('email', 'unknown@email.com')
-    
-    email = EmailMessage(
-        '[NYCS SITE] New Contact',
-        message,
-        from_email,
-        [to_email],
-        [],
-        reply_to=[from_email],
-        headers=None,
-    )
-    email.send(fail_silently=False)
+    sender_name = request.POST.get('name', '')
+
+    try:
+        resend.Emails.send({
+            "from": settings.DEFAULT_FROM_EMAIL,
+            "to": [to_email],
+            "subject": "[NYCS SITE] New Contact",
+            "html": "<p><b>From:</b> %s &lt;%s&gt;</p><p>%s</p>" % (sender_name, from_email, message.replace('\n', '<br>')),
+            "reply_to": from_email,
+        })
+    except Exception as e:
+        print("Resend error:", e)
     return HttpResponse()
 
 
@@ -835,7 +837,7 @@ def send_custom_email(request):
         for r in range(rounds):
             s = r*90
             e = r*90+90
-            send_sendinblue_email(subject, message, emails[s:e], bcc, attachment)
+            send_resend_email(subject, message, emails[s:e], bcc, attachment)
             time.sleep(2)
 
         return redirect('/admin')
@@ -843,43 +845,39 @@ def send_custom_email(request):
     return HttpResponse()
 
 
-def send_sendinblue_email(subject, message, to_emails=[], bcc=False, attachment=None):
+def send_resend_email(subject, message, to_emails=[], bcc=False, attachment=None):
+    import resend
     import base64
     from django.conf import settings
-    from utils.sendinblue import Mailin
+
+    resend.api_key = settings.RESEND_API_KEY
 
     print('#### Subject', subject)
     print('#### Amount', len(to_emails))
     print('#### Emails', to_emails)
-    
-    m = Mailin("https://api.sendinblue.com/v2.0", settings.SENDINBLUE_API_KEY)
-    dict_emails = {}
-    for email in to_emails:
-        dict_emails[email] = ''
 
-    data ={
-            "from" : [settings.DEFAULT_EMAIL, "NY Coed Soccer"],
-            "subject" : subject,
-            "html" : message
+    params = {
+        "from": settings.DEFAULT_FROM_EMAIL,
+        "subject": subject,
+        "html": message,
+        "reply_to": settings.DEFAULT_EMAIL,
     }
+
     if bcc:
-        data.update({
-            "to" : {settings.DEFAULT_EMAIL: "NY Coed Soccer"},
-            "bcc": dict_emails,
-        })
+        params["to"] = [settings.DEFAULT_EMAIL]
+        params["bcc"] = list(to_emails)
     else:
-        data.update({
-            "to" : dict_emails,
-            "replyto" : [settings.DEFAULT_EMAIL, "NY Coed Soccer"],
-        })
+        params["to"] = list(to_emails)
 
-    print('#### row data ####', data)
     if attachment:
-        b64 = base64.b64encode(attachment.file.read())
-        data['attachment'] = {attachment.name : b64.decode('utf-8')}
+        b64 = base64.b64encode(attachment.file.read()).decode('utf-8')
+        params["attachments"] = [{"filename": attachment.name, "content": b64}]
 
-    result = m.send_email(data)
-    print(result)
+    try:
+        result = resend.Emails.send(params)
+        print('#### Resend result:', result)
+    except Exception as e:
+        print('#### Resend error:', e)
     return
 
 def send_mailgun_email(subject, message, to_emails=[]):

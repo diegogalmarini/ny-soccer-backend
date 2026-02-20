@@ -159,11 +159,11 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 
 # ==============================================
-# SPRINT 0 SAFETY OVERRIDES (THE FIREWALL)
+# EMAIL (Resend)
 # ==============================================
-# 1. KILL EMAIL (Print to console only)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = "do-not-reply@nycoedsoccer.com"
+RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
+DEFAULT_EMAIL = os.environ.get('DEFAULT_EMAIL', 'info@nycoedsoccer.com')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'onboarding@resend.dev')
 
 # 2. KILL PAYPAL (Redirect to Sandbox)
 PAYPAL_TEST = True
